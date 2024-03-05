@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <vector>
 
-void prepareCone(float radius, float height, int slices, int stacks) {
+std::vector<float> cone(float radius, float height, int slices, int stacks) {
 
     std::vector<float> vertices;
     float delta = (2*M_PI) / slices;
@@ -81,5 +81,6 @@ void prepareCone(float radius, float height, int slices, int stacks) {
             vertices.push_back(next_r * cos(alfa + delta));
         }
     }
+    return vertices;
 }
 

@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <vector>
 
-void plane (float dimension, int divisions) {
+std::vector<float> plane (float dimension, int divisions) {
     //Vector creation
     std::vector<float> vertices;
 
@@ -41,5 +41,5 @@ void plane (float dimension, int divisions) {
 		}
 	}
 
-
+	return vertices;
 }
