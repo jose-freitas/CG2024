@@ -4,7 +4,7 @@
 #include <vector>
 
 
-void prepareSphere(float radius, int slices, int stacks) {
+std::vector<float> sphere(float radius, int slices, int stacks) {
     std::vector<float> vertices;
 
     float deltaPhi = (float)(M_PI) / stacks;
@@ -45,4 +45,5 @@ void prepareSphere(float radius, int slices, int stacks) {
             vertices.push_back(radius * sin(nextPhi) * sin(nextTheta));
         }
     }
+    return vertices;
 }

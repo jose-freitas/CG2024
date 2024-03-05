@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <vector>
 
-void box (float dimension, int divisions) {
+std::vector<float> box (float dimension, int divisions) {
     //criação do vector
     std::vector<float> vertices;
 
@@ -195,7 +195,5 @@ void box (float dimension, int divisions) {
 			vertices.push_back(z * unit - half);
 		}
 	}
-
-
-
+	return vertices;
 }
