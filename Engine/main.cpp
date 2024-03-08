@@ -1,9 +1,8 @@
-#include <vector>
 #include <stdio.h>
+#include <vector>
 #include <iostream>
 #include <fstream>
-#include "parser.cpp"
-#include "camera.cpp"
+
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -15,17 +14,21 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-float alfa = 0.0f, beta = 0.0f, radius = 5.0f;
+#include "parser.cpp"
+#include "camera.cpp"
 
-float camX, camY, camZ;
-float lookX, lookY, lookZ;
-float upX, upY, upZ;
-float fov, near, far; //int?
+
+const std::string MODEL_PATH = "../../modelFiles/";
+
+float alfa = 0.0f, bet = 0.0f, radius = 5.0f;
+
+World worldSettings;
 
 int timebase;
 float frames;
 
 GLuint renderVertices, verticeCount; 
+
 
 
 std::vector<float> verticesGlobal;
@@ -34,20 +37,37 @@ std::vector<float> verticesGlobal;
 std::vector<float> createModelsArray(std::vector<std::string> filenames){
 	std::vector<float> vertices;
 
+	cout << "Loading .3d files..." << "\n";
+
 	for(int i = 0; i < filenames.size(); i++){
 
+
 		std::string filename = filenames[i];
-		std::ifstream file = std::ifstream(filename);
+
+		cout << filename << "\n";
+
+		std::ifstream file = std::ifstream(MODEL_PATH + filename);
 
 		float coordinate;
 
 		while(file >> coordinate){
+			//cout << coordinate << "\n"; // DEBUG
 			vertices.push_back(coordinate);
 		}
 
 		file.close();
 	}
+
+	cout << "Finished loading .3d files!" << "\n";
+
 	return vertices;
+}
+
+void spherical2Cartesian() {
+	
+	worldSettings.camera.position.x = radius * cos(bet) * sin(alfa);
+	worldSettings.camera.position.y = radius * sin(bet);
+	worldSettings.camera.position.z = radius * cos(bet) * cos(alfa);
 }
 
 
@@ -57,10 +77,11 @@ void renderScene(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	//Set the Camera
-	setCamera(camX, camY, camZ, 
-		      lookX, lookY, lookZ,
-		      upX, upY, upZ,
-		      fov, near, far);
+	/*glLoadIdentity();
+	gluLookAt(camX, camY, camZ,
+		0.0, 0.0, 0.0,
+		0.0f, 1.0f, 0.0f);*/
+	setCamera(worldSettings.camera);
 
 	verticeCount = verticesGlobal.size() / 3; 
 
@@ -84,6 +105,40 @@ void renderScene(void) {
 	glutSwapBuffers();
 }
 
+void processSpecialKeys(int key, int xx, int yy) {
+
+	switch (key) {
+
+	case GLUT_KEY_RIGHT:
+		alfa -= 0.1; break;
+
+	case GLUT_KEY_LEFT:
+		alfa += 0.1; break;
+
+	case GLUT_KEY_UP:
+		bet += 0.1f;
+		if (bet > 1.5f)
+			bet = 1.5f;
+		break;
+
+	case GLUT_KEY_DOWN:
+		bet -= 0.1f;
+		if (bet < -1.5f)
+			bet = -1.5f;
+		break;
+
+	case GLUT_KEY_PAGE_DOWN: radius -= 0.1f;
+		if (radius < 0.1f)
+			radius = 0.1f;
+		break;
+
+	case GLUT_KEY_PAGE_UP: radius += 0.1f; break;
+	}
+	spherical2Cartesian();
+	glutPostRedisplay();
+
+}
+
 
 void printInfo() {
 	printf("Vendor: %s\n", glGetString(GL_VENDOR));
@@ -94,36 +149,66 @@ void printInfo() {
 	printf("Page Up and Page Down control the distance from the camera to the origin\n");
 }
 
+void changeSize(int w, int h) {
+
+	// Prevent a divide by zero, when window is too short
+	// (you cant make a window with zero width).
+	if(h == 0)
+		h = 1;
+
+	// compute window's aspect ratio 
+	float ratio = w * 1.0 / h;
+
+	// Set the projection matrix as current
+	glMatrixMode(GL_PROJECTION);
+	// Load Identity Matrix
+	glLoadIdentity();
+	
+	// Set the viewport to be the entire window
+    glViewport(0, 0, w, h);
+
+	// Set perspective
+	//gluPerspective(45.0f ,ratio, 1.0f ,1000.0f);
+	Camera camera = worldSettings.camera;
+	gluPerspective(camera.projection.fov, ratio, camera.projection.near, camera.projection.far);
+
+	// return to the model view matrix mode
+	glMatrixMode(GL_MODELVIEW);
+}
 
 int main(int argc, char **argv) {
 
-	World world;
+	std::vector<std::string> filenames;
 
-	parser("settings.xml", world);
+	parser("../settings.xml", worldSettings);
 
-	verticesGlobal = createModelsArray(world.models);
+	for(int i = 0; i < worldSettings.models.size(); i++){
+		filenames.push_back(worldSettings.models[i].mod);
+	}
+
+	verticesGlobal = createModelsArray(filenames);
 
 // init GLUT and the window
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH|GLUT_DOUBLE|GLUT_RGBA);
 	glutInitWindowPosition(100,100);
-	glutInitWindowSize(800,800);
+	glutInitWindowSize(worldSettings.windowWidth,worldSettings.windowHeight);
 	glutCreateWindow("CG@DI-UM");
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 		
 // Required callback registry 
+	//spherical2Cartesian();
 	timebase = glutGet (GLUT_ELAPSED_TIME);
 
 	glutDisplayFunc(renderScene);
-	//glutReshapeFunc(changeSize);
+	glutReshapeFunc(changeSize);
 
 	glutIdleFunc(renderScene);
 	
-// Callback registration for keyboard processing
-	/*glutKeyboardFunc(processKeys);
-	glutSpecialFunc(processSpecialKeys);*/
+//Callback registration for keyboard processing
+	glutSpecialFunc(processSpecialKeys);
 	
 
 	// init GLEW

@@ -1,4 +1,5 @@
-#include "parser.hpp"
+#include <stdio.h>
+#include "./include/parser.hpp"
 
 
 void parser (const char* file, World& world) {
@@ -48,7 +49,7 @@ void parser (const char* file, World& world) {
             cameraElem->QueryFloatAttribute("z", &world.camera.up.z);
             }
 
-            cameraElem = elem->FirstChildElement("lookAt");       
+            cameraElem = elem->FirstChildElement("projection");       
             if (cameraElem) {
             cameraElem->QueryFloatAttribute("fov", &world.camera.projection.fov);
             cameraElem->QueryFloatAttribute("near", &world.camera.projection.near);

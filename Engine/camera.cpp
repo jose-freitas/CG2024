@@ -1,13 +1,22 @@
+#include <stdio.h>
+#include <vector>
+#include "./include/parser.hpp"
+
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
+#include <GL/glew.h>
 #include <GL/glut.h>
 #endif
 
-void setCamera(float camX, float camY, float camZ, float lookX, float lookY, float lookZ, float upX, float upY, float upZ, float fov, float near, float far) {
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+
+void setCamera(Camera camera) {
 	glLoadIdentity();
-	gluLookAt(camX, camY, camZ, 
-		      lookX, lookY, lookZ,
-			  upX, upY, upZ);
-	gluPerspective(fov, 0, near, far);
+	gluLookAt(camera.position.x, camera.position.y, camera.position.z, 
+		      camera.lookAt.x, camera.lookAt.y, camera.lookAt.z,
+			  camera.up.x, camera.up.y, camera.up.z);
+	//gluPerspective(camera.projection.fov, 1.0, camera.projection.near, camera.projection.far);
 }

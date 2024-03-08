@@ -8,9 +8,12 @@
 #include <iostream>
 #include <fstream>
 
+
+const std::string MODEL_PATH = "../../modelFiles/";
+
 void writeFile (std::vector<float> vertices, std::string filename){
-    std::string path = "../3dFiles/";
-    std::ofstream file = std::ofstream(path+filename);
+
+    std::ofstream file = std::ofstream(MODEL_PATH+filename);
 
     for(int i = 0; i < vertices.size(); i++){
         file << vertices[i];
@@ -22,7 +25,7 @@ void writeFile (std::vector<float> vertices, std::string filename){
     }
 
 
-    std::cout << "Created file... " << (path+filename) << "\n";
+    std::cout << "Created file... " << (filename) << "\n";
 
     file.close();
 }

@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "tinyxml2.h"
+#include "../utils/tinyxml2.cpp"
 
 using namespace tinyxml2;
 using namespace std;
