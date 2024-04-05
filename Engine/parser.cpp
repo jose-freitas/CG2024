@@ -1,6 +1,35 @@
 #include <stdio.h>
 #include "./include/parser.hpp"
 
+const std::string MODEL_PATH = "../../modelFiles/";
+
+std::vector<float> createModelsArray(std::vector<std::string> filenames){
+	std::vector<float> vertices;
+
+	cout << "Loading .3d files..." << "\n";
+
+	for(int i = 0; i < filenames.size(); i++){
+
+		std::string filename = filenames[i];
+
+		std::ifstream file = std::ifstream(MODEL_PATH + filename);
+
+		float coordinate;
+
+		while(file >> coordinate){
+			//cout << coordinate << "\n"; // DEBUG
+			vertices.push_back(coordinate);
+		}
+
+		cout << filename << "\n";
+
+		file.close();
+	}
+
+	cout << "Finished loading .3d files! " << vertices.size() << " vertices!" << "\n";
+
+	return vertices;
+}
 
 void parseGroup (XMLElement* groupElem, Group& group) {
 
@@ -18,6 +47,7 @@ void parseGroup (XMLElement* groupElem, Group& group) {
         // rotation
         XMLElement* rotateElem = transformElem->FirstChildElement("rotate");
         if (rotateElem) {
+            rotateElem->QueryFloatAttribute("angle", &group.transform.rotateAngle);
             rotateElem->QueryFloatAttribute("x", &group.transform.rotate.x);
             rotateElem->QueryFloatAttribute("y", &group.transform.rotate.y);
             rotateElem->QueryFloatAttribute("z", &group.transform.rotate.z);
@@ -32,15 +62,21 @@ void parseGroup (XMLElement* groupElem, Group& group) {
         } 
     }
 
-    // models
+    // model filenames
+    std::vector<std::string> filenames;
+
     XMLElement* modelsElem = groupElem->FirstChildElement("models");
     if (modelsElem) {
         Model model;
         for (XMLElement* modelElem = modelsElem->FirstChildElement("model"); modelElem; modelElem = modelElem->NextSiblingElement("model")) {
             model.mod = modelElem->Attribute("file");
             group.models.push_back(model);
+            filenames.push_back(model.mod);
         }
     }
+
+    // model vertices
+    group.groupVertices = createModelsArray(filenames);
 
     // recursive parsing groups
     for (XMLElement* childGroupElem = groupElem->FirstChildElement("group"); childGroupElem; childGroupElem = childGroupElem->NextSiblingElement("group")) {
@@ -110,5 +146,5 @@ void parser (const char* file, World& world) {
     }
 
     // Groups
-    parseGroup(base->FirstChildElement("group"), world.root)
+    parseGroup(base->FirstChildElement("group"), world.root);
 }

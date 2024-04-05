@@ -1,6 +1,7 @@
 #ifndef PARSER_HPP
 #define PARSER_HPP
 
+#include <stdio.h>
 #include <iostream>
 #include <vector>
 #include "../utils/tinyxml2.cpp"
@@ -10,11 +11,31 @@ using namespace std;
 
 struct Coords {
     float x, y, z;
+
+    Coords Add(Coords coords) {
+        
+        return Coords {
+            x = x + coords.x,
+            y = y + coords.y,
+            z = z + coords.z
+        };
+
+    }
+
+    Coords Mult(Coords coords) {
+        
+        return Coords {
+            x = x * coords.x,
+            y = y * coords.y,
+            z = z * coords.z
+        };
+    }
 };
 
 struct Transform {
     Coords translate;
     Coords rotate;
+    float rotateAngle;
     Coords scale;
 };
 
@@ -30,7 +51,6 @@ struct Camera {
 struct Model {
     string mod;
     string texture;
-    Transform transform;
     struct Color {
         struct RGB {
             int R, G, B;
@@ -41,6 +61,8 @@ struct Model {
 
 struct Group {
     Transform transform; 
+    GLuint renderVertices;
+    std::vector<float> groupVertices;
     vector<Model> models;
     vector<Group> children;
 };
