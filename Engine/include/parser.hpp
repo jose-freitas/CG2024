@@ -12,6 +12,12 @@ struct Coords {
     float x, y, z;
 };
 
+struct Transform {
+    Coords translate;
+    Coords rotate;
+    Coords scale;
+};
+
 struct Camera {
     Coords position;
     Coords lookAt;
@@ -24,6 +30,7 @@ struct Camera {
 struct Model {
     string mod;
     string texture;
+    Transform transform;
     struct Color {
         struct RGB {
             int R, G, B;
@@ -32,11 +39,17 @@ struct Model {
     } color;
 };
 
+struct Group {
+    Transform transform; 
+    vector<Model> models;
+    vector<Group> children;
+};
+
 struct World {
     int windowWidth;
     int windowHeight;
     Camera camera;
-    vector<Model> models;
+    Group root;
 };
 
 void parser(const char* file, World& world);
