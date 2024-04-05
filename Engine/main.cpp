@@ -35,17 +35,17 @@ void spherical2Cartesian() {
 }
 
 void initVBO(Group& group) {
-    if (group.groupVertices.empty())
-        return; // Skip initialization if group has no vertices
-
-    int vertexCount = group.groupVertices.size() / 3;
-    GLuint renderVerticesId;
-    glGenBuffers(1, &renderVerticesId);
-    glBindBuffer(GL_ARRAY_BUFFER, renderVerticesId);
-    glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float) * 3, group.groupVertices.data(), GL_STATIC_DRAW);
-    group.renderVertices = renderVerticesId; // Store the VBO ID in the group
-    renderVertices.push_back(renderVerticesId); // Store the VBO ID in the global vector
-
+    if (!group.groupVertices.empty())
+    {
+        int vertexCount = group.groupVertices.size() / 3;
+        GLuint renderVerticesId;
+        glGenBuffers(1, &renderVerticesId);
+        glBindBuffer(GL_ARRAY_BUFFER, renderVerticesId);
+        glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float) * 3, group.groupVertices.data(), GL_STATIC_DRAW);
+        group.renderVertices = renderVerticesId; // Store the VBO ID in the group
+        renderVertices.push_back(renderVerticesId); // Store the VBO ID in the global vector
+    }
+    
     // Recursively initialize VBOs for children groups
     for (int i = 0; i < group.children.size(); i++) {
         initVBO(group.children[i]);
@@ -113,7 +113,7 @@ void renderScene() {
 
     // Rendering
     renderAxis();
-    
+
     Transform baseTransform = Transform {
         translate: Coords { 0.0f, 0.0f, 0.0f },
         rotate: Coords { 0.0f, 0.0f, 0.0f },
