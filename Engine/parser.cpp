@@ -34,6 +34,7 @@ std::vector<float> createModelsArray(std::vector<std::string> filenames){
 void parseGroup (XMLElement* groupElem, Group& group) {
 
     XMLElement* transformElem = groupElem->FirstChildElement("transform");
+
     if (transformElem) {
 
         // translation
@@ -43,23 +44,42 @@ void parseGroup (XMLElement* groupElem, Group& group) {
             translateElem->QueryFloatAttribute("y", &group.transform.translate.y);
             translateElem->QueryFloatAttribute("z", &group.transform.translate.z);
         }
+        else {
+            group.transform.translate = Coords { 0.0f, 0.0f, 0.0f };
+        }
 
         // rotation
         XMLElement* rotateElem = transformElem->FirstChildElement("rotate");
+
         if (rotateElem) {
             rotateElem->QueryFloatAttribute("angle", &group.transform.rotateAngle);
             rotateElem->QueryFloatAttribute("x", &group.transform.rotate.x);
             rotateElem->QueryFloatAttribute("y", &group.transform.rotate.y);
             rotateElem->QueryFloatAttribute("z", &group.transform.rotate.z);
         }
+        else {
+            group.transform.rotate = Coords { 0.0f, 0.0f, 0.0f };
+            group.transform.rotateAngle = 0.0f;
+        }
 
         // scale
         XMLElement* scaleElem = transformElem->FirstChildElement("scale");
+
         if (scaleElem) {
             scaleElem->QueryFloatAttribute("x", &group.transform.scale.x);
             scaleElem->QueryFloatAttribute("y", &group.transform.scale.y);
             scaleElem->QueryFloatAttribute("z", &group.transform.scale.z);
+
+            // Force default Scale to always be (1, 1, 1)
+            Coords groupScale = group.transform.scale;
+
+            if (groupScale.x == 0.0f || groupScale.y == 0.0f || groupScale.z == 0.0f) {
+                group.transform.scale = Coords { 1.0f, 1.0f, 1.0f };
+            }
         } 
+        else {
+            group.transform.scale = Coords { 1.0f, 1.0f, 1.0f };
+        }
     }
 
     // model filenames

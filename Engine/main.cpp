@@ -45,7 +45,7 @@ void initVBO(Group& group) {
         group.renderVertices = renderVerticesId; // Store the VBO ID in the group
         renderVertices.push_back(renderVerticesId); // Store the VBO ID in the global vector
     }
-    
+
     // Recursively initialize VBOs for children groups
     for (int i = 0; i < group.children.size(); i++) {
         initVBO(group.children[i]);
@@ -67,9 +67,9 @@ void renderGroup(Group& group, Transform parentTransform) {
     glPushMatrix();
 
     glColor3f(1.0f, 1.0f, 1.0f); // White for now
+    glRotatef(newTransform.rotateAngle, newTransform.rotate.x, newTransform.rotate.y, newTransform.rotate.z);
     glTranslatef(newTransform.translate.x, newTransform.translate.y, newTransform.translate.z);
 	glScalef(newTransform.scale.x, newTransform.scale.y, newTransform.scale.z);
-	glRotatef(newTransform.rotateAngle, newTransform.rotate.x, newTransform.rotate.y, newTransform.rotate.z);
 
     // Draw Shapes
     if (!group.groupVertices.empty()) { // Check if vertices exist
@@ -203,13 +203,6 @@ int main(int argc, char **argv) {
 
 	// Parse XML Settings
     parser("../settings.xml", worldSettings);
-
-    // Force Root Scale always be (1, 1, 1)
-    Coords rootScale = worldSettings.root.transform.scale; 
-
-    if (rootScale.x == 0.0f || rootScale.y == 0.0f || rootScale.z == 0.0f) {
-        worldSettings.root.transform.scale = Coords { 1.0f, 1.0f, 1.0f };
-    }
 
 	// init GLUT and the window
     glutInit(&argc, argv);
