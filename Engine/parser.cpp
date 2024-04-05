@@ -2,6 +2,55 @@
 #include "./include/parser.hpp"
 
 
+void parseGroup (XMLElement* groupElem, Group& group) {
+
+    XMLElement* transformElem = groupElem->FirstChildElement("transform");
+    if (transformElem) {
+
+        // translation
+        XMLElement* translateElem = transformElem->FirstChildElement("translate");
+        if(translateElem) {
+            translateElem->QueryFloatAttribute("x", &group.transform.translate.x);
+            translateElem->QueryFloatAttribute("y", &group.transform.translate.y);
+            translateElem->QueryFloatAttribute("z", &group.transform.translate.z);
+        }
+
+        // rotation
+        XMLElement* rotateElem = transformElem->FirstChildElement("rotate");
+        if (rotateElem) {
+            rotateElem->QueryFloatAttribute("x", &group.transform.rotate.x);
+            rotateElem->QueryFloatAttribute("y", &group.transform.rotate.y);
+            rotateElem->QueryFloatAttribute("z", &group.transform.rotate.z);
+        }
+
+        // scale
+        XMLElement* scaleElem = transformElem->FirstChildElement("scale");
+        if (scaleElem) {
+            scaleElem->QueryFloatAttribute("x", &group.transform.scale.x);
+            scaleElem->QueryFloatAttribute("y", &group.transform.scale.y);
+            scaleElem->QueryFloatAttribute("z", &group.transform.scale.z);
+        } 
+    }
+
+    // models
+    XMLElement* modelsElem = groupElem->FirstChildElement("models");
+    if (modelsElem) {
+        Model model;
+        for (XMLElement* modelElem = modelsElem->FirstChildElement("model"); modelElem; modelElem = modelElem->NextSiblingElement("model")) {
+            model.mod = modelElem->Attribute("file");
+            group.models.push_back(model);
+        }
+    }
+
+    // recursive parsing groups
+    for (XMLElement* childGroupElem = groupElem->FirstChildElement("group"); childGroupElem; childGroupElem = childGroupElem->NextSiblingElement("group")) {
+        Group childGroup;
+        parseGroup(childGroupElem, childGroup);
+        group.children.push_back(childGroup);
+    }
+    
+}
+
 void parser (const char* file, World& world) {
     XMLDocument doc;
 
@@ -57,32 +106,9 @@ void parser (const char* file, World& world) {
             }
         }
 
-        // Parsing models
-        if (strcmp(elem->Name(), "group") == 0) {
-            
-            XMLElement* models = elem->FirstChildElement("models");
-            
-            if (models) {
-                XMLElement* modElem;
-                Model newModel;
-                
-                for (XMLElement* model = models->FirstChildElement("model"); model; model = model->NextSiblingElement("model")) {
-                
-                    //modElem = model->FirstChildElement();
-                    newModel.mod = model->Attribute("file");
-                
-                    /*if (strcmp(model->Name(), "texture") == 0) {
-                        newModel.texture = modElem->Attribute("texture");
-                        modElem = modElem->NextSiblingElement();
-                    }*/
-                
-                    world.models.push_back(newModel);
-
-
-                }
-            }
-        }
-
         elem = elem->NextSiblingElement();
     }
+
+    // Groups
+    parseGroup(base->FirstChildElement("group"), world.root)
 }
