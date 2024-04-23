@@ -2,6 +2,7 @@
 #include "box.cpp"
 #include "cone.cpp"
 #include "sphere.cpp"
+#include "bezier.cpp"
 
 #include <vector>
 #include <stdio.h>
@@ -77,6 +78,15 @@ int main(int argc, char **argv) {
 
         writeFile(vertices, filename);
     }
+    else if("bezier" == type){
+        std::string input_file = argv[2]; 
+        int tesselation = std::stoi(argv[3]); 
+        std::string filename = std::string(argv[4]); 
+
+        std::vector<float> vertices = bezier(input_file, tesselation);
+
+        writeFile(vertices, filename);
+    } 
     else {
         std::cout << "No model type selected!\n";
     }
