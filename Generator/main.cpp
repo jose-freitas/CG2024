@@ -87,6 +87,18 @@ int main(int argc, char **argv) {
 
         writeFile(vertices, filename);
     } 
+    else if("torus" == type){
+
+        float inner_radius = atof(argv[2]);
+		float outer_radius = atof(argv[3]);
+		int slices = atoi(argv[4]);
+		int stacks = atoi(argv[5]);
+        std::string filename = std::string(argv[6]); 
+
+        std::vector<float> vertices = torus(inner_radius, outer_radius, slices, stacks, filename);
+
+        writeFile(vertices, filename);
+    } 
     else {
         std::cout << "No model type selected!\n";
     }
