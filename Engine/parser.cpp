@@ -83,6 +83,13 @@ void parseGroup (XMLElement* groupElem, Group& group) {
             group.transform.scale = Coords { 1.0f, 1.0f, 1.0f };
         }
     }
+    else
+    {
+        group.transform.translate = Coords { 0.0f, 0.0f, 0.0f };
+        group.transform.rotate = Coords { 0.0f, 0.0f, 0.0f };
+        group.transform.rotateAngle = 0.0f;
+        group.transform.scale = Coords { 1.0f, 1.0f, 1.0f };
+    }
 
     // model filenames
     std::vector<std::string> filenames;
