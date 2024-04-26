@@ -79,7 +79,7 @@ int main(int argc, char **argv) {
 
         writeFile(vertices, filename);
     }
-    else if("bezier" == type){
+    else if("patch" == type){
         std::string input_file = argv[2]; 
         int tesselation = std::stoi(argv[3]); 
         std::string filename = std::string(argv[4]); 

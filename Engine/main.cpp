@@ -18,7 +18,7 @@
 #include "camera.cpp"
 
 
-float alfa = 0.0f, bet = 0.0f, radius = 5.0f;
+float alfa = 0.0f, bet = 0.0f, radius = 15.0f;
 
 World worldSettings;
 

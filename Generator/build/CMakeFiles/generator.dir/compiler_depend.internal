@@ -3,10 +3,12 @@
 
 CMakeFiles/generator.dir/main.cpp.o
  /home/ika/Documents/Universidade/CG2024/Generator/main.cpp
+ /home/ika/Documents/Universidade/CG2024/Generator/bezier.cpp
  /home/ika/Documents/Universidade/CG2024/Generator/box.cpp
  /home/ika/Documents/Universidade/CG2024/Generator/cone.cpp
  /home/ika/Documents/Universidade/CG2024/Generator/plane.cpp
  /home/ika/Documents/Universidade/CG2024/Generator/sphere.cpp
+ /home/ika/Documents/Universidade/CG2024/Generator/torus.cpp
  /usr/include/GL/freeglut_std.h
  /usr/include/GL/gl.h
  /usr/include/GL/glext.h
