@@ -33,11 +33,23 @@ struct Coords {
 };
 
 struct Transform {
-    Coords translate;
-    Coords rotate;
+    Translate translate;
+    Rotate rotate;
     float rotateAngle;
     Coords scale;
 };
+
+struct Translate {
+    float time;
+    bool align;
+    vector<Coords> points;
+}
+
+struct Rotate {
+    float angle;
+    float time;
+    Coords point;
+}
 
 struct Camera {
     Coords position;

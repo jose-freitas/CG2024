@@ -40,28 +40,44 @@ void parseGroup (XMLElement* groupElem, Group& group) {
     if (transformElem) {
 
         // translation
-        XMLElement* translateElem = transformElem->FirstChildElement("translate");
-        if(translateElem) {
-            translateElem->QueryFloatAttribute("x", &group.transform.translate.x);
-            translateElem->QueryFloatAttribute("y", &group.transform.translate.y);
-            translateElem->QueryFloatAttribute("z", &group.transform.translate.z);
+         XMLElement* translateElem = groupElem->FirstChildElement("translate");
+        if (translateElem) {
+            translateElem->QueryFloatAttribute("time", &group.transform.translate.time);
+            translateElem->QueryBoolAttribute("align", &group.translate.align);
+
+        // Parse Catmull-Rom curve points
+            for (XMLElement* pointElem = translateElem->FirstChildElement("point"); pointElem; pointElem = pointElem->NextSiblingElement("point")) {
+                float x, y, z;
+                pointElem->QueryFloatAttribute("x", &x);
+                pointElem->QueryFloatAttribute("y", &y);
+                pointElem->QueryFloatAttribute("z", &z);
+                group.transform.translate.points.push_back(Coords{x, y, z});
         }
+
         else {
-            group.transform.translate = Coords { 0.0f, 0.0f, 0.0f };
+            group.transform.translate.time = 0.0f;
+            group.transform.translate.align = True;
+            group.transform.translate.points.push_back(Coords{0, 0, 0});
+            group.transform.translate.points.push_back(Coords{0, 0, 0});
+            group.transform.translate.points.push_back(Coords{0, 0, 0});
+            group.transform.translate.points.push_back(Coords{0, 0, 0});
         }
+    }
 
         // rotation
         XMLElement* rotateElem = transformElem->FirstChildElement("rotate");
 
         if (rotateElem) {
-            rotateElem->QueryFloatAttribute("angle", &group.transform.rotateAngle);
-            rotateElem->QueryFloatAttribute("x", &group.transform.rotate.x);
-            rotateElem->QueryFloatAttribute("y", &group.transform.rotate.y);
-            rotateElem->QueryFloatAttribute("z", &group.transform.rotate.z);
+            rotateElem->QueryFloatAttribute("time", &group.transform.rotate.time);
+            rotateElem->QueryFloatAttribute("angle", &group.transform.rotate.angle);
+            rotateElem->QueryFloatAttribute("x", &group.transform.rotate.point.x);
+            rotateElem->QueryFloatAttribute("y", &group.transform.rotate.poiny.y);
+            rotateElem->QueryFloatAttribute("z", &group.transform.rotate.point.z);
         }
         else {
-            group.transform.rotate = Coords { 0.0f, 0.0f, 0.0f };
-            group.transform.rotateAngle = 0.0f;
+            group.transform.rotate.time = 0.0f;
+            group.transform.rotate.point = Coords { 0.0f, 0.0f, 0.0f };
+            group.transform.rotate.angle = 0.0f;
         }
 
         // scale
