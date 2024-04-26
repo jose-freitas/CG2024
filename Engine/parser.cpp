@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <iostream>
+#include <fstream>
 #include "./include/parser.hpp"
 
 const std::string MODEL_PATH = "../../modelFiles/";

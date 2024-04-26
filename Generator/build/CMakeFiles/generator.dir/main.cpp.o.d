@@ -150,7 +150,8 @@ CMakeFiles/generator.dir/main.cpp.o: \
  /usr/include/c++/13/bits/charconv.h \
  /usr/include/c++/13/bits/basic_string.tcc /usr/include/c++/13/bitset \
  /home/ika/Documents/Universidade/CG2024/Generator/sphere.cpp \
- /usr/include/c++/13/iostream /usr/include/c++/13/ostream \
+ /home/ika/Documents/Universidade/CG2024/Generator/bezier.cpp \
+ /usr/include/c++/13/fstream /usr/include/c++/13/istream \
  /usr/include/c++/13/ios /usr/include/c++/13/exception \
  /usr/include/c++/13/bits/exception_ptr.h \
  /usr/include/c++/13/bits/cxxabi_init_exception.h \
@@ -184,10 +185,10 @@ CMakeFiles/generator.dir/main.cpp.o: \
  /usr/include/c++/13/bits/streambuf_iterator.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/ctype_inline.h \
  /usr/include/c++/13/bits/locale_facets.tcc \
- /usr/include/c++/13/bits/basic_ios.tcc \
- /usr/include/c++/13/bits/ostream.tcc /usr/include/c++/13/istream \
- /usr/include/c++/13/bits/istream.tcc /usr/include/c++/13/fstream \
- /usr/include/c++/13/bits/codecvt.h \
+ /usr/include/c++/13/bits/basic_ios.tcc /usr/include/c++/13/ostream \
+ /usr/include/c++/13/bits/ostream.tcc \
+ /usr/include/c++/13/bits/istream.tcc /usr/include/c++/13/bits/codecvt.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/basic_file.h \
  /usr/include/x86_64-linux-gnu/c++/13/bits/c++io.h \
- /usr/include/c++/13/bits/fstream.tcc
+ /usr/include/c++/13/bits/fstream.tcc /usr/include/c++/13/iostream \
+ /home/ika/Documents/Universidade/CG2024/Generator/torus.cpp

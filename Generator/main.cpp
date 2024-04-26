@@ -3,6 +3,7 @@
 #include "cone.cpp"
 #include "sphere.cpp"
 #include "bezier.cpp"
+#include "torus.cpp"
 
 #include <vector>
 #include <stdio.h>
@@ -95,7 +96,7 @@ int main(int argc, char **argv) {
 		int stacks = atoi(argv[5]);
         std::string filename = std::string(argv[6]); 
 
-        std::vector<float> vertices = torus(inner_radius, outer_radius, slices, stacks, filename);
+        std::vector<float> vertices = torus(inner_radius, outer_radius, slices, stacks);
 
         writeFile(vertices, filename);
     } 
