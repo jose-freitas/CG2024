@@ -7,6 +7,7 @@ CMakeFiles/engine.dir/main.cpp.o
  /home/ika/Documents/Universidade/CG2024/Engine/utils/tinyxml2.cpp
  /home/ika/Documents/Universidade/CG2024/Engine/include/parser.hpp
  /home/ika/Documents/Universidade/CG2024/Engine/camera.cpp
+ /home/ika/Documents/Universidade/CG2024/Engine/catmullrom.cpp
  /home/ika/Documents/Universidade/CG2024/Engine/parser.cpp
  /usr/include/GL/freeglut_std.h
  /usr/include/GL/gl.h

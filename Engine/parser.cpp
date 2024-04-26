@@ -40,10 +40,11 @@ void parseGroup (XMLElement* groupElem, Group& group) {
     if (transformElem) {
 
         // translation
-         XMLElement* translateElem = groupElem->FirstChildElement("translate");
+         XMLElement* translateElem = transformElem->FirstChildElement("translate");
+
         if (translateElem) {
-            translateElem->QueryFloatAttribute("time", &group.transform.translate.time);
-            translateElem->QueryBoolAttribute("align", &group.translate.align);
+            if (translateElem->QueryFloatAttribute("time", &group.transform.translate.time) == XML_NO_ATTRIBUTE) group.transform.translate.time = 0.0f;
+            translateElem->QueryBoolAttribute("align", &group.transform.translate.align);
 
         // Parse Catmull-Rom curve points
             for (XMLElement* pointElem = translateElem->FirstChildElement("point"); pointElem; pointElem = pointElem->NextSiblingElement("point")) {
@@ -52,26 +53,29 @@ void parseGroup (XMLElement* groupElem, Group& group) {
                 pointElem->QueryFloatAttribute("y", &y);
                 pointElem->QueryFloatAttribute("z", &z);
                 group.transform.translate.points.push_back(Coords{x, y, z});
-        }
+            }
 
+            group.transform.currentTranslate = group.transform.translate.points[0];
+        }
         else {
             group.transform.translate.time = 0.0f;
-            group.transform.translate.align = True;
+            group.transform.translate.align = true;
             group.transform.translate.points.push_back(Coords{0, 0, 0});
             group.transform.translate.points.push_back(Coords{0, 0, 0});
             group.transform.translate.points.push_back(Coords{0, 0, 0});
             group.transform.translate.points.push_back(Coords{0, 0, 0});
+            group.transform.currentTranslate = group.transform.translate.points[0];
         }
-    }
+    
 
         // rotation
         XMLElement* rotateElem = transformElem->FirstChildElement("rotate");
 
         if (rotateElem) {
-            rotateElem->QueryFloatAttribute("time", &group.transform.rotate.time);
+            if (rotateElem->QueryFloatAttribute("time", &group.transform.rotate.time) == XML_NO_ATTRIBUTE) group.transform.rotate.time = 0.0f;
             rotateElem->QueryFloatAttribute("angle", &group.transform.rotate.angle);
             rotateElem->QueryFloatAttribute("x", &group.transform.rotate.point.x);
-            rotateElem->QueryFloatAttribute("y", &group.transform.rotate.poiny.y);
+            rotateElem->QueryFloatAttribute("y", &group.transform.rotate.point.y);
             rotateElem->QueryFloatAttribute("z", &group.transform.rotate.point.z);
         }
         else {
@@ -83,7 +87,8 @@ void parseGroup (XMLElement* groupElem, Group& group) {
         // scale
         XMLElement* scaleElem = transformElem->FirstChildElement("scale");
 
-        if (scaleElem) {
+        if (scaleElem) 
+        {
             scaleElem->QueryFloatAttribute("x", &group.transform.scale.x);
             scaleElem->QueryFloatAttribute("y", &group.transform.scale.y);
             scaleElem->QueryFloatAttribute("z", &group.transform.scale.z);
@@ -101,9 +106,9 @@ void parseGroup (XMLElement* groupElem, Group& group) {
     }
     else
     {
-        group.transform.translate = Coords { 0.0f, 0.0f, 0.0f };
-        group.transform.rotate = Coords { 0.0f, 0.0f, 0.0f };
-        group.transform.rotateAngle = 0.0f;
+        group.transform.currentTranslate = Coords { 0.0f, 0.0f, 0.0f };
+        group.transform.rotate.point = Coords { 0.0f, 0.0f, 0.0f };
+        group.transform.rotate.angle = 0.0f;
         group.transform.scale = Coords { 1.0f, 1.0f, 1.0f };
     }
 
@@ -154,6 +159,7 @@ void parser (const char* file, World& world) {
              elem->QueryIntAttribute("width", &world.windowWidth);
              elem->QueryIntAttribute("height", &world.windowHeight);
         }
+       
 
         //Camera
         if (strcmp(elem->Name(), "camera") == 0) {
@@ -186,6 +192,7 @@ void parser (const char* file, World& world) {
             cameraElem->QueryFloatAttribute("far", &world.camera.projection.far);
             }
         }
+    
 
         elem = elem->NextSiblingElement();
     }

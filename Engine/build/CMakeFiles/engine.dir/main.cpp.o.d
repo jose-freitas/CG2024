@@ -199,4 +199,5 @@ CMakeFiles/engine.dir/main.cpp.o: \
  /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
  /usr/include/x86_64-linux-gnu/bits/uio_lim.h /usr/include/c++/13/cstring \
  /usr/include/string.h /usr/include/strings.h /usr/include/c++/13/cstdarg \
- /home/ika/Documents/Universidade/CG2024/Engine/camera.cpp
+ /home/ika/Documents/Universidade/CG2024/Engine/camera.cpp \
+ /home/ika/Documents/Universidade/CG2024/Engine/catmullrom.cpp

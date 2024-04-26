@@ -6,6 +6,7 @@ CMakeFiles/engine.dir/main.cpp.o: /home/ika/Documents/Universidade/CG2024/Engine
   /home/ika/Documents/Universidade/CG2024/Engine/utils/tinyxml2.cpp \
   /home/ika/Documents/Universidade/CG2024/Engine/include/parser.hpp \
   /home/ika/Documents/Universidade/CG2024/Engine/camera.cpp \
+  /home/ika/Documents/Universidade/CG2024/Engine/catmullrom.cpp \
   /home/ika/Documents/Universidade/CG2024/Engine/parser.cpp \
   /usr/include/GL/freeglut_std.h \
   /usr/include/GL/gl.h \
@@ -412,6 +413,10 @@ CMakeFiles/engine.dir/main.cpp.o: /home/ika/Documents/Universidade/CG2024/Engine
 
 /usr/include/c++/13/tuple:
 
+/usr/include/stdc-predef.h:
+
+/usr/include/c++/13/tr1/special_function_util.h:
+
 /usr/include/c++/13/debug/debug.h:
 
 /usr/include/c++/13/stdexcept:
@@ -421,12 +426,6 @@ CMakeFiles/engine.dir/main.cpp.o: /home/ika/Documents/Universidade/CG2024/Engine
 /home/ika/Documents/Universidade/CG2024/Engine/include/tinyxml2.h:
 
 /usr/include/c++/13/bits/specfun.h:
-
-/usr/include/x86_64-linux-gnu/bits/endianness.h:
-
-/usr/include/c++/13/tr1/poly_laguerre.tcc:
-
-/usr/include/c++/13/bits/basic_string.h:
 
 /usr/include/time.h:
 
@@ -439,10 +438,6 @@ CMakeFiles/engine.dir/main.cpp.o: /home/ika/Documents/Universidade/CG2024/Engine
 /usr/include/c++/13/bits/invoke.h:
 
 /usr/include/c++/13/bits/locale_classes.tcc:
-
-/usr/include/stdc-predef.h:
-
-/usr/include/c++/13/tr1/special_function_util.h:
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls.h:
 
@@ -502,6 +497,14 @@ CMakeFiles/engine.dir/main.cpp.o: /home/ika/Documents/Universidade/CG2024/Engine
 
 /usr/include/c++/13/bits/cxxabi_init_exception.h:
 
+/usr/include/math.h:
+
+/usr/include/c++/13/bits/exception_defines.h:
+
+/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
+
+/usr/include/c++/13/bits/localefwd.h:
+
 /usr/include/alloca.h:
 
 /usr/include/x86_64-linux-gnu/c++/13/bits/os_defines.h:
@@ -527,6 +530,12 @@ CMakeFiles/engine.dir/main.cpp.o: /home/ika/Documents/Universidade/CG2024/Engine
 /usr/include/x86_64-linux-gnu/bits/floatn-common.h:
 
 /usr/include/GL/freeglut_std.h:
+
+/home/ika/Documents/Universidade/CG2024/Engine/catmullrom.cpp:
+
+/usr/include/c++/13/bits/allocator.h:
+
+/usr/include/c++/13/bits/stl_bvector.h:
 
 /usr/include/GL/glut.h:
 
@@ -576,14 +585,6 @@ CMakeFiles/engine.dir/main.cpp.o: /home/ika/Documents/Universidade/CG2024/Engine
 
 /usr/include/c++/13/bits/basic_ios.h:
 
-/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
-
-/usr/include/c++/13/bits/localefwd.h:
-
-/usr/include/math.h:
-
-/usr/include/c++/13/bits/exception_defines.h:
-
 /usr/include/c++/13/bits/locale_facets.h:
 
 /home/ika/Documents/Universidade/CG2024/Engine/camera.cpp:
@@ -602,11 +603,13 @@ CMakeFiles/engine.dir/main.cpp.o: /home/ika/Documents/Universidade/CG2024/Engine
 
 /usr/include/c++/13/bits/cpp_type_traits.h:
 
+/usr/include/x86_64-linux-gnu/bits/endianness.h:
+
+/usr/include/c++/13/bits/basic_string.h:
+
+/usr/include/c++/13/tr1/poly_laguerre.tcc:
+
 /usr/include/c++/13/bits/stl_algobase.h:
-
-/usr/include/c++/13/bits/allocator.h:
-
-/usr/include/c++/13/bits/stl_bvector.h:
 
 /usr/include/c++/13/bits/stl_construct.h:
 
@@ -632,9 +635,9 @@ CMakeFiles/engine.dir/main.cpp.o: /home/ika/Documents/Universidade/CG2024/Engine
 
 /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
 
-/usr/include/c++/13/bits/std_abs.h:
-
 /usr/include/c++/13/bits/postypes.h:
+
+/usr/include/c++/13/bits/std_abs.h:
 
 /usr/include/c++/13/bits/uses_allocator.h:
 

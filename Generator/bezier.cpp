@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <vector>
 
+
 #include <fstream>
 #include <string>
 #include <iostream>
@@ -71,9 +72,9 @@ std::vector<float> bezier(const std::string& input_file,int tesselation) {
     std::vector<std::vector<int>> patches(n_patches);
     for (int i = 0; i < n_patches; i++) {
         for (int j = 0; j < 16; j++) {
-            int index;
-            patch_file >> index;
-            patches[i].push_back(index);
+            std::string line;
+			patch_file >> line;
+            patches[i].push_back(stoi(line));
         }
     }
 
@@ -83,13 +84,15 @@ std::vector<float> bezier(const std::string& input_file,int tesselation) {
     std::vector<std::vector<float>> cpoints(n_cpoints);
     for (int i = 0; i < n_cpoints; i++) {
         for (int j = 0; j < 3; j++) {
-            float coord;
-            patch_file >> coord;
-            cpoints[i].push_back(coord);
+            std::string line;
+			patch_file >> line;
+            cpoints[i].push_back(stof(line));
         }
     }
 
     patch_file.close();
+
+    int vert = n_patches * 6 * tesselation * tesselation;
 
     float delta_u, delta_v;
     delta_u = delta_v = 1.0f / tesselation;
