@@ -88,10 +88,43 @@ Coords animateCatmullRomCurve(float time, float **p, int point_count) {
     return Coords { pos[0], pos[1], pos[2] };
 }
 
-void renderGroup(Group& group, Transform parentTransform) {
+void TransformGroup(Group& group)
+{
+    // Transform Translate points to Multidimensional Array
+    int point_count = group.transform.translate.points.size();
+
+    float** p = new float*[point_count];
+
+    for(int i = 0; i < point_count; i++) {
+        Coords point = group.transform.translate.points[i];
+        p[i] = new float[3];
+        p[i][0] = point.x;
+        p[i][1] = point.y;
+        p[i][2] = point.z;
+    }
+
+    // Animate Curve
+    Coords newTranslate = group.transform.currentTranslate;
+
+    if (point_count >= 4) {
+        newTranslate = animateCatmullRomCurve(group.transform.translate.time, p, point_count);
+    }
+
+    // Animate Rotation
+    float angle = group.transform.rotate.angle;
+    
+    if (group.transform.rotate.time > 0.0f)
+        angle = elapsedTime * 360.0f / group.transform.rotate.time;
+    
+    // Transform
+    glTranslatef(newTranslate.x, newTranslate.y, newTranslate.z);
+    glRotatef(angle, group.transform.rotate.point.x, group.transform.rotate.point.y, group.transform.rotate.point.z);
+    glScalef(group.transform.scale.x, group.transform.scale.y, group.transform.scale.z);
+}
+
+void renderGroup(Group& group, vector<Group *> parentGroups) {
     
     elapsedTime = glutGet(GLUT_ELAPSED_TIME) / 1000.0f; // Convert to seconds
-
 
     int vertexCount = group.groupVertices.size() / 3;
 
@@ -107,61 +140,25 @@ void renderGroup(Group& group, Transform parentTransform) {
         p[i][1] = point.y;
         p[i][2] = point.z;
     }
-    
-    // Animate Curve
-    Coords newTranslate = group.transform.currentTranslate;
-
-    if (point_count >= 4) {
-        newTranslate = animateCatmullRomCurve(group.transform.translate.time, p, point_count);
-    }
-    
-    /*
-    float newParentAngle = parentTransform.rotate.angle;
-
-    if (parentTransform.rotate.time > 0.0f)
-        newParentAngle = elapsedTime * 360.0f / parentTransform.rotate.time;
 
     // Apply Transforms to Curves
     glPushMatrix();
 
     glColor3f(1.0f, 1.0f, 1.0f); // White for now
 
-    // Parent Transform
-    glRotatef(newParentAngle, parentTransform.rotate.point.x, parentTransform.rotate.point.y, parentTransform.rotate.point.z);
-    glTranslatef(parentTransform.currentTranslate.x, parentTransform.currentTranslate.y, parentTransform.currentTranslate.z);
+    // Apply all previous parent transforms
+    for (int i = 0; i < parentGroups.size(); i++)
+    {
+        Group& parentGroup = *parentGroups[i];
+        TransformGroup(parentGroup);
+    }
 
     // Draw Curve
     if (point_count >= 4) {
         renderCatmullRomCurve(p, point_count);
     }
 
-    glPopMatrix();
-
-	// Calculate new Parent Transform
-    Rotate newRotate = group.transform.rotate;
-    newRotate.angle = parentTransform.rotate.angle + group.transform.rotate.angle;
-    
-    Transform newTransform = Transform {
-        currentTranslate: parentTransform.currentTranslate.Add(newTranslate),
-        translate: group.transform.translate,
-        rotate: newRotate,
-        scale: parentTransform.scale.Mult(group.transform.scale)
-    };
-
-    float newAngle = newTransform.rotate.angle;
-
-    if (newTransform.rotate.time > 0.0f)
-        newAngle = elapsedTime * 360.0f / newTransform.rotate.time;
-        
-    // Apply Transforms to Models
-    glPushMatrix();
-
-    glColor3f(1.0f, 1.0f, 1.0f); // White for now
-
-    // Transform
-    glRotatef(newAngle, newTransform.rotate.point.x, newTransform.rotate.point.y, newTransform.rotate.point.z);
-    glTranslatef(newTransform.currentTranslate.x, newTransform.currentTranslate.y, newTransform.currentTranslate.z);
-	glScalef(newTransform.scale.x, newTransform.scale.y, newTransform.scale.z);
+    TransformGroup(group);
 
     // Draw Shapes
     if (!group.groupVertices.empty()) { // Check if vertices exist
@@ -172,55 +169,15 @@ void renderGroup(Group& group, Transform parentTransform) {
 
     // Clean Transform Matrix
     glPopMatrix();
-    */
 
-	// Calculate new Parent Transform
-    Rotate newRotate = group.transform.rotate;
-    //newRotate.angle = parentTransform.rotate.angle + group.transform.rotate.angle;
-
-    Transform newTransform = Transform {
-        currentTranslate: parentTransform.currentTranslate.Add(newTranslate),
-        translate: group.transform.translate,
-        rotate: newRotate,
-        scale: parentTransform.scale.Mult(group.transform.scale)
-    };
-
-    
-    if (newTransform.rotate.time > 0.0f)
-        newTransform.rotate.angle = elapsedTime * 360.0f / newTransform.rotate.time;
-        
-    // Apply Transforms to Models
-    glPushMatrix();
-       
-    glColor3f(1.0f, 1.0f, 1.0f); // White for now
-
-    glRotatef(parentTransform.rotate.angle, parentTransform.rotate.point.x, parentTransform.rotate.point.y, parentTransform.rotate.point.z);
-
-    // Draw Curve
-    if (point_count >= 4) {
-        renderCatmullRomCurve(p, point_count);
-    }
-    
-    // Transform Matrix
-    glRotatef(newTransform.rotate.angle, newTransform.rotate.point.x, newTransform.rotate.point.y, newTransform.rotate.point.z);
-    glTranslatef(newTransform.currentTranslate.x, newTransform.currentTranslate.y, newTransform.currentTranslate.z);
-	glScalef(newTransform.scale.x, newTransform.scale.y, newTransform.scale.z);
-
-    // Draw Shapes
-    if (!group.groupVertices.empty()) { // Check if vertices exist
-        glBindBuffer(GL_ARRAY_BUFFER, group.renderVertices);
-        glVertexPointer(3, GL_FLOAT, 0, nullptr);
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-    }
-
-    // Clean Transform Matrix
-    glPopMatrix();
+    parentGroups.push_back(&group);
     
     // Render Group Children
     for(int i = 0; i < group.children.size(); i++) {
-        renderGroup(group.children[i], newTransform);
+        renderGroup(group.children[i], parentGroups);
     }
 }
+
 
 void renderAxis () {
     glBegin(GL_LINES);
@@ -258,7 +215,9 @@ void renderScene() {
         scale: Coords { 1.0f, 1.0f, 1.0f }
     };
 
-    renderGroup(worldSettings.root, baseTransform);
+    //renderGroup(worldSettings.root, baseTransform);
+    vector<Group*> rootParent;
+    renderGroup(worldSettings.root, rootParent);
 
     // End of frame
     glutSwapBuffers();
