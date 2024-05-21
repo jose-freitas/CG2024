@@ -6,6 +6,7 @@
 std::vector<float> box (float dimension, int divisions) {
     //criação do vector
     std::vector<float> vertices;
+	std::vector<float> normals;
 
     float unit = dimension / divisions;
 	float half = dimension / 2.0f;
@@ -18,26 +19,54 @@ std::vector<float> box (float dimension, int divisions) {
 			vertices.push_back(half);
 			vertices.push_back(z* unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half);
 			vertices.push_back(z * unit - half);
+
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
 			
 			// Right Triangle
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half);
 			vertices.push_back(z * unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back((x+1) * unit - half);
 			vertices.push_back(half);
 			vertices.push_back((z+1) * unit - half);
+
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
 		}
 	}
 
@@ -49,26 +78,54 @@ std::vector<float> box (float dimension, int divisions) {
 			vertices.push_back(-half);
 			vertices.push_back(z * unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(-half);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(-half);
 			vertices.push_back(z* unit - half);
+
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
 			
 			// Right Triangle
             vertices.push_back((x+1) * unit - half);
 			vertices.push_back(-half);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(-half);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(-half);
 			vertices.push_back(z * unit - half);
+
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
 		}
 	}
 
@@ -80,26 +137,55 @@ std::vector<float> box (float dimension, int divisions) {
 			vertices.push_back(half - z * unit);
 			vertices.push_back(- half);
 
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half - (z+1) * unit);
 			vertices.push_back(- half);
 
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half - z * unit);
 			vertices.push_back(- half);
+
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+
 			
 			// Right Triangle
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half - z * unit);
 			vertices.push_back(- half);
 
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+
+
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half - (z+1) * unit);
 			vertices.push_back(- half);
 
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half - (z+1) * unit);
 			vertices.push_back(- half);
+
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(-1.0f);
 		}
 	}
 
@@ -111,26 +197,55 @@ std::vector<float> box (float dimension, int divisions) {
 			vertices.push_back(half - z * unit);
 			vertices.push_back(half);
 
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half - (z+1) * unit);
 			vertices.push_back(half);
 
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+		
+
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half - z * unit);
 			vertices.push_back(half);
+
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+
 			
 			// Right Triangle
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half - (z+1) * unit);
 			vertices.push_back(half);
 
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+
+
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half - (z+1) * unit);
 			vertices.push_back(half);
 
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+
+
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half - z * unit);
 			vertices.push_back(half);
+
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
 		}
 	}
 
@@ -142,26 +257,55 @@ std::vector<float> box (float dimension, int divisions) {
 			vertices.push_back(half - (x + 1) * unit);
 			vertices.push_back(z * unit - half);
 
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(- half);
 			vertices.push_back(half - x * unit);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(- half);
 			vertices.push_back(half - x * unit);
 			vertices.push_back(z * unit - half);
+
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+
 			
 			// Right Triangle
 			vertices.push_back(- half);
 			vertices.push_back(half - (x + 1) * unit);
 			vertices.push_back(z * unit - half);
 
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(- half);
 			vertices.push_back(half - (x + 1) * unit);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(- half);
 			vertices.push_back(half - x * unit);
 			vertices.push_back((z + 1) * unit - half);
+
+			normals.push_back(-1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
 		}
 	}
 
@@ -173,26 +317,55 @@ std::vector<float> box (float dimension, int divisions) {
 			vertices.push_back(half - x * unit);
 			vertices.push_back(z * unit - half);
 
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(half);
 			vertices.push_back(half - x * unit);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(half);
 			vertices.push_back(half - (x + 1) * unit);
 			vertices.push_back(z * unit - half);
+
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+
 			
 			// Right Triangle
             vertices.push_back(half);
 			vertices.push_back(half - x * unit);
 			vertices.push_back((z + 1) * unit - half);
 
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(half);
 			vertices.push_back(half - (x + 1) * unit);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(half);
 			vertices.push_back(half - (x + 1) * unit);
 			vertices.push_back(z * unit - half);
+
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+			normals.push_back(0.0f);
 		}
 	}
 	return vertices;
