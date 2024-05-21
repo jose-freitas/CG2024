@@ -22,7 +22,10 @@
 std::vector<float> cone(float radius, float height, int slices, int stacks) {
 
     std::vector<float> vertices;
-    float delta = (2*M_PI) / slices;
+    std::vector<float> normals;
+
+
+    float delta = (2.0f * M_PI) / slices;
     
 
     //Bottom
@@ -34,13 +37,27 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
         vertices.push_back(0.0f);
         vertices.push_back(0.0f);
 
+        normals.push_back(0.0f);
+        normals.push_back(-1.0f);
+        normals.push_back(0.0f);
+
+
 		vertices.push_back(radius * sin(alfa + delta));
         vertices.push_back(0.0f);
         vertices.push_back(radius * cos(alfa + delta));
+
+        normals.push_back(0.0f);
+        normals.push_back(-1.0f);
+        normals.push_back(0.0f);
+
         
         vertices.push_back(radius * sin(alfa));
         vertices.push_back(0.0f);
         vertices.push_back(radius * cos(alfa));
+
+        normals.push_back(0.0f);
+        normals.push_back(-1.0f);
+        normals.push_back(0.0f);
     }
 
 
@@ -59,22 +76,32 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
             vertices.push_back(r * sin(alfa));
             vertices.push_back(y);
             vertices.push_back(r * cos(alfa));
+            /*
+            normals.push_back(sin(alfa));
+            normals.push_back(0.0f);
+            normals.push_back(cos(alfa));
+            */
+
 
             vertices.push_back(r * sin(alfa + delta));
             vertices.push_back(y);
             vertices.push_back(r * cos(alfa + delta));
+
 
             vertices.push_back((next_r * sin(alfa)));
             vertices.push_back(next_y);
             vertices.push_back(next_r * cos(alfa));
 
+
             vertices.push_back(next_r * sin(alfa));
             vertices.push_back(next_y);
             vertices.push_back(next_r * cos(alfa));
 
+
             vertices.push_back(r * sin(alfa + delta));
             vertices.push_back(y);
             vertices.push_back(r * cos(alfa + delta));
+
 
             vertices.push_back(next_r * sin(alfa + delta));
             vertices.push_back(next_y);

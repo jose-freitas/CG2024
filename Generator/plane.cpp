@@ -6,6 +6,7 @@
 std::vector<float> plane (float dimension, int divisions) {
     //Vector creation
     std::vector<float> vertices;
+	std::vector<float> normals;
 
     //Plane
     float unit = dimension / divisions;
@@ -18,26 +19,55 @@ std::vector<float> plane (float dimension, int divisions) {
 			vertices.push_back(0.0f);
 			vertices.push_back(z* unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(0.0f);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(0.0f);
 			vertices.push_back(z * unit - half);
+
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+
 			
 			// Right Triangle
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(0.0f);
 			vertices.push_back(z * unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back(x * unit - half);
 			vertices.push_back(0.0f);
 			vertices.push_back((z+1) * unit - half);
 
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
+
+
 			vertices.push_back((x+1) * unit - half);
 			vertices.push_back(0.0f);
 			vertices.push_back((z+1) * unit - half);
+
+			normals.push_back(0.0f);
+			normals.push_back(1.0f);
+			normals.push_back(0.0f);
 		}
 	}
 
