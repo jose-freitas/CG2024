@@ -7,6 +7,8 @@ std::vector<float> box (float dimension, int divisions) {
     //criação do vector
     std::vector<float> vertices;
 	std::vector<float> normals;
+	std::vector<float> texCoord;
+
 
     float unit = dimension / divisions;
 	float half = dimension / 2.0f;
@@ -368,5 +370,5 @@ std::vector<float> box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 		}
 	}
-	return vertices;
+	return vertices, normals, texCoord;
 }

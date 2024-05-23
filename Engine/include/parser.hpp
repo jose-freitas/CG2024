@@ -1,6 +1,15 @@
 #ifndef PARSER_HPP
 #define PARSER_HPP
 
+#ifdef __APPLE__
+#include <GLUT/glut.h>
+#include <OpenGL/gl3.h>
+#define __gl_h_
+#include <GLUT/glut.h>
+#else
+#include <GL/glut.h>
+#endif
+
 #include <stdio.h>
 #include <iostream>
 #include <vector>

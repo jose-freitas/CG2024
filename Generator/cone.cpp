@@ -23,8 +23,10 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
 
     std::vector<float> vertices;
     std::vector<float> normals;
+    std::vector<float> texCoord;
 
 
+    float deltaPhi = (float)(M_PI) / stacks;
     float delta = (2.0f * M_PI) / slices;
     
 
@@ -64,6 +66,9 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
     //Body
     for(int i = 0; i<stacks; i++)
     {
+        float phi = i * deltaPhi;
+        float nextPhi = (i + 1) * deltaPhi;
+
         float y = i * height / stacks;
         float next_y = (i + 1) * height / stacks;
         float r = radius * (1 - static_cast<float>(i) / stacks);
@@ -72,42 +77,62 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
         for(int j = 0; j<slices; j++)
         {
             float alfa = delta * j;
+            float nextAlfa = (j + 1) * delta;
 
             vertices.push_back(r * sin(alfa));
             vertices.push_back(y);
             vertices.push_back(r * cos(alfa));
-            /*
-            normals.push_back(sin(alfa));
-            normals.push_back(0.0f);
-            normals.push_back(cos(alfa));
-            */
+
+            normals.push_back(sin(phi) * cos(alfa));
+			normals.push_back(cos(phi));
+			normals.push_back(sin(phi) * sin(alfa));
 
 
             vertices.push_back(r * sin(alfa + delta));
             vertices.push_back(y);
             vertices.push_back(r * cos(alfa + delta));
+
+            normals.push_back(sin(phi) * cos(nextAlfa));
+			normals.push_back(cos(phi));
+			normals.push_back(sin(phi) * sin(nextAlfa));
 
 
             vertices.push_back((next_r * sin(alfa)));
             vertices.push_back(next_y);
             vertices.push_back(next_r * cos(alfa));
 
+            normals.push_back(sin(nextPhi) * cos(alfa));
+			normals.push_back(cos(nextPhi));
+			normals.push_back(sin(nextPhi) * sin(alfa));
+
 
             vertices.push_back(next_r * sin(alfa));
             vertices.push_back(next_y);
             vertices.push_back(next_r * cos(alfa));
+
+            normals.push_back(sin(nextPhi) * cos(alfa));
+			normals.push_back(cos(nextPhi));
+			normals.push_back(sin(nextPhi) * sin(alfa));
 
 
             vertices.push_back(r * sin(alfa + delta));
             vertices.push_back(y);
             vertices.push_back(r * cos(alfa + delta));
 
+            normals.push_back(sin(phi) * cos(nextAlfa));
+			normals.push_back(cos(phi));
+			normals.push_back(sin(phi) * sin(nextAlfa));
+
 
             vertices.push_back(next_r * sin(alfa + delta));
             vertices.push_back(next_y);
             vertices.push_back(next_r * cos(alfa + delta));
+
+            normals.push_back(sin(nextPhi) * cos(nextAlfa));
+			normals.push_back(cos(nextPhi));
+			normals.push_back(sin(nextPhi) * sin(nextAlfa));
         }
     }
-    return vertices;
+    return vertices, normals, texCoord;
 }
 
