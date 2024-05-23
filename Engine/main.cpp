@@ -11,6 +11,8 @@
 #include <GL/glut.h>
 #endif
 
+#include <IL/il.h>
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 
@@ -197,8 +199,20 @@ void renderAxis () {
 }
 
 void renderScene() {
+    float pos[4] = {1.0, 1.0, 1.0, 0.0};
+	float dark[] = { 0.7, 0.1, 0.8, 1.0 };
+	float white[] = { 1.0, 1.0, 1.0, 1.0 };
+	float red[] = { 1.0, 0.2, 0.6, 1.0 };
+
     // Clear buffers
+    glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //Light
+    glLightfv(GL_LIGHT0, GL_POSITION, pos);
+	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+	glMaterialf(GL_FRONT, GL_SHININESS, 128);
 
     // Set the Camera
     setCamera(worldSettings.camera);
@@ -295,6 +309,43 @@ void printInfo() {
     printf("Page Up and Page Down control the distance from the camera to the origin\n");
 }
 
+
+int loadTexture(std::string s) {
+
+	unsigned int t,tw,th;
+	unsigned char *texData;
+	unsigned int texID;
+
+	ilInit();
+	ilEnable(IL_ORIGIN_SET);
+	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+	ilGenImages(1,&t); 
+	ilBindImage(t);
+	ilLoadImage((ILstring)s.c_str());
+	tw = ilGetInteger(IL_IMAGE_WIDTH);
+	th = ilGetInteger(IL_IMAGE_HEIGHT);
+	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+	texData = ilGetData();
+
+	glGenTextures(1,&texID);
+	
+	glBindTexture(GL_TEXTURE_2D,texID);
+	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_S,		GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_T,		GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MAG_FILTER,   	GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return texID;
+
+}
+
+
 int main(int argc, char **argv) {
 
 	// Parse XML Settings
@@ -313,13 +364,14 @@ int main(int argc, char **argv) {
     glutDisplayFunc(renderScene);
     glutIdleFunc(renderScene);
     glutReshapeFunc(changeSize);
+
+    // Callback registration
     glutSpecialFunc(processSpecialKeys);
 
 	#ifndef _APPLE
+    //init GLEW
 		glewInit();
 	#endif
-
-	glEnableClientState(GL_VERTEX_ARRAY);
 
     // Init VBO
     initVBO(worldSettings.root);
@@ -327,11 +379,36 @@ int main(int argc, char **argv) {
 	//  OpenGL settings
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
-	glPolygonMode(GL_FRONT, GL_LINE);
+
+    // init Lighting
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    float dark[4] = {0.2, 0.2, 0.2, 1.0};
+	float white[4] = {1.0, 1.0, 1.0, 1.0};
+	float black[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+
+    // light colors
+	glLightfv(GL_LIGHT0, GL_AMBIENT, dark);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, white);
+
+    // controls global ambient light
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
+
+    //init
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    //Texturas
+    glEnable(GL_TEXTURE_2D);
+
+    //texIDFigura = loadTexture("NomeDaTextura.jpg");
 
     printInfo();
 
     glutMainLoop();
 
-    return 0;
+    return 1; 
 }

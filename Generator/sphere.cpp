@@ -7,6 +7,8 @@
 std::vector<float> sphere(float radius, int slices, int stacks) {
     std::vector<float> vertices;
     std::vector<float> normals;
+    std::vector<float> texCoord;
+    
 
     float deltaPhi = (float)(M_PI) / stacks;
     float deltaTheta = (float)(2 * M_PI) / slices;
@@ -75,5 +77,5 @@ std::vector<float> sphere(float radius, int slices, int stacks) {
 			normals.push_back(sin(nextPhi) * sin(nextTheta));
         }
     }
-    return vertices;
+    return vertices, normals, texCoord;
 }

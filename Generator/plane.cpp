@@ -7,6 +7,7 @@ std::vector<float> plane (float dimension, int divisions) {
     //Vector creation
     std::vector<float> vertices;
 	std::vector<float> normals;
+	std::vector<float> texCoord;
 
     //Plane
     float unit = dimension / divisions;
@@ -23,6 +24,9 @@ std::vector<float> plane (float dimension, int divisions) {
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(0.0f);
@@ -32,6 +36,9 @@ std::vector<float> plane (float dimension, int divisions) {
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(0.0f);
@@ -40,6 +47,9 @@ std::vector<float> plane (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
+
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
 
 			
 			// Right Triangle
@@ -51,6 +61,9 @@ std::vector<float> plane (float dimension, int divisions) {
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(0.0f);
@@ -60,6 +73,9 @@ std::vector<float> plane (float dimension, int divisions) {
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back((x+1) * unit - half);
 			vertices.push_back(0.0f);
@@ -68,8 +84,11 @@ std::vector<float> plane (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
+
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
 		}
 	}
 
-	return vertices;
+	return vertices, normals, texCoord;
 }
