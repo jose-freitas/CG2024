@@ -115,6 +115,46 @@ void parseGroup (XMLElement* groupElem, Group& group) {
         Model model;
         for (XMLElement* modelElem = modelsElem->FirstChildElement("model"); modelElem; modelElem = modelElem->NextSiblingElement("model")) {
             model.mod = modelElem->Attribute("file");
+
+            // Texture
+            XMLElement* textureElem = modelElem->FirstChildElement("texture");
+            if (textureElem) {
+                model.texture.file = textureElem->Attribute("file");
+            }
+
+            // Color
+            XMLElement* colorElem = modelElem->FirstChildElement("color");
+            if (colorElem) {
+                XMLElement* colorsubElem = colorElem->FirstChildElement("diffuse");
+                if (colorsubElem) {
+                    diffuseElem->QueryIntAttribute("R", &model.color.diffuse.R);
+                    diffuseElem->QueryIntAttribute("G", &model.color.diffuse.G);
+                    diffuseElem->QueryIntAttribute("B", &model.color.diffuse.B);
+                }
+                colorsubElem = colorElem->FirstChildElement("ambient");
+                if (colorsubElem) {
+                    ambientElem->QueryIntAttribute("R", &model.color.ambient.R);
+                    ambientElem->QueryIntAttribute("G", &model.color.ambient.G);
+                    ambientElem->QueryIntAttribute("B", &model.color.ambient.B);
+                }
+                colorsubElem = colorElem->FirstChildElement("specular");
+                if (colorsubElem) {
+                    specularElem->QueryIntAttribute("R", &model.color.specular.R);
+                    specularElem->QueryIntAttribute("G", &model.color.specular.G);
+                    specularElem->QueryIntAttribute("B", &model.color.specular.B);
+                }
+                colorsubelemElem = colorElem->FirstChildElement("emissive");
+                if (colorsubElem) {
+                    emissiveElem->QueryIntAttribute("R", &model.color.emissive.R);
+                    emissiveElem->QueryIntAttribute("G", &model.color.emissive.G);
+                    emissiveElem->QueryIntAttribute("B", &model.color.emissive.B);
+                }
+                colorsubelemElem = colorElem->FirstChildElement("shininess");
+                if (colorsubElem) {
+                    shininessElem->QueryIntAttribute("value", &model.color.shininess);
+                }
+            }
+
             group.models.push_back(model);
             filenames.push_back(model.mod);
         }
@@ -189,6 +229,28 @@ void parser (const char* file, World& world) {
 
         elem = elem->NextSiblingElement();
     }
+
+    // Lights
+        if (strcmp(elem->Name(), "lights") == 0) {
+            for (XMLElement* lightElem = elem->FirstChildElement("light"); lightElem; lightElem = lightElem->NextSiblingElement("light")) {
+                Light light;
+                light.type = lightElem->Attribute("type");
+                if (light.type == "point" || light.type == "spotlight") {
+                    lightElem->QueryFloatAttribute("posX", &light.position.x);
+                    lightElem->QueryFloatAttribute("posY", &light.position.y);
+                    lightElem->QueryFloatAttribute("posZ", &light.position.z);
+                }
+                if (light.type == "directional" || light.type == "spotlight") {
+                    lightElem->QueryFloatAttribute("dirX", &light.direction.x);
+                    lightElem->QueryFloatAttribute("dirY", &light.direction.y);
+                    lightElem->QueryFloatAttribute("dirZ", &light.direction.z);
+                }
+                if (light.type == "spotlight") {
+                    lightElem->QueryFloatAttribute("cutoff", &light.cutoff);
+                }
+                world.lights.push_back(light);
+            }
+        }
 
     // Groups
     parseGroup(base->FirstChildElement("group"), world.root);
