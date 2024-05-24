@@ -69,15 +69,28 @@ struct Camera {
     } projection;
 };
 
+struct Color {
+    struct RGB {
+        int R, G, B;
+    } diffuse, ambient, specular, emissive;
+    int shininess;
+};
+
+struct Texture {
+    string file;
+};
+
+struct Light {
+    string type;
+    Coords position;
+    Coords direction;
+    float cutoff;
+};
+
 struct Model {
     string mod;
-    string texture;
-    struct Color {
-        struct RGB {
-            int R, G, B;
-        } diffuse, ambient, specular, emissive;
-        int shininess;
-    } color;
+    Texture texture;
+    Color color;
 };
 
 struct Group {
@@ -93,6 +106,7 @@ struct World {
     int windowHeight;
     Camera camera;
     Group root;
+    vector<Light> lights;
 };
 
 void parser(const char* file, World& world);
