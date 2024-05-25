@@ -97,6 +97,7 @@ struct Group {
     Transform transform; 
     GLuint renderVertices;
     std::vector<float> groupVertices;
+    std::vector<float> groupNormals;
     vector<Model> models;
     vector<Group> children;
 };

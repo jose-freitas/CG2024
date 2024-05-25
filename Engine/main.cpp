@@ -48,11 +48,15 @@ void initVBO(Group& group) {
     {
         int vertexCount = group.groupVertices.size() / 3;
         GLuint renderVerticesId;
+        GLuint renderNormalsId;
         glGenBuffers(1, &renderVerticesId);
         glBindBuffer(GL_ARRAY_BUFFER, renderVerticesId);
         glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float) * 3, group.groupVertices.data(), GL_STATIC_DRAW);
         group.renderVertices = renderVerticesId; // Store the VBO ID in the group
         renderVertices.push_back(renderVerticesId); // Store the VBO ID in the global vector
+        glGenBuffers(1, &renderNormalsId);
+        glBindBuffer(GL_ARRAY_BUFFER, renderNormalsId);
+	    //glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float) * 3, n,  GL_STATIC_DRAW); qual o n?
     }
 
     // Recursively initialize VBOs for children groups
@@ -228,6 +232,10 @@ void renderScene() {
         rotate: Rotate { angle: 0.0f, time: 0.0f, point: emptyCoords },
         scale: Coords { 1.0f, 1.0f, 1.0f }
     };
+
+    Texture baseTexture = Texture {/*base values*/};
+
+    Light baseLight = {/*base values*/};
 
     //renderGroup(worldSettings.root, baseTransform);
     vector<Group*> rootParent;

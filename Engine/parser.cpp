@@ -132,31 +132,31 @@ void parseGroup (XMLElement* groupElem, Group& group) {
             if (colorElem) {
                 XMLElement* colorsubElem = colorElem->FirstChildElement("diffuse");
                 if (colorsubElem) {
-                    diffuseElem->QueryIntAttribute("R", &model.color.diffuse.R);
-                    diffuseElem->QueryIntAttribute("G", &model.color.diffuse.G);
-                    diffuseElem->QueryIntAttribute("B", &model.color.diffuse.B);
+                    colorsubElem->QueryIntAttribute("R", &model.color.diffuse.R);
+                    colorsubElem->QueryIntAttribute("G", &model.color.diffuse.G);
+                    colorsubElem->QueryIntAttribute("B", &model.color.diffuse.B);
                 }
                 colorsubElem = colorElem->FirstChildElement("ambient");
                 if (colorsubElem) {
-                    ambientElem->QueryIntAttribute("R", &model.color.ambient.R);
-                    ambientElem->QueryIntAttribute("G", &model.color.ambient.G);
-                    ambientElem->QueryIntAttribute("B", &model.color.ambient.B);
+                    colorsubElem->QueryIntAttribute("R", &model.color.ambient.R);
+                    colorsubElem->QueryIntAttribute("G", &model.color.ambient.G);
+                    colorsubElem->QueryIntAttribute("B", &model.color.ambient.B);
                 }
                 colorsubElem = colorElem->FirstChildElement("specular");
                 if (colorsubElem) {
-                    specularElem->QueryIntAttribute("R", &model.color.specular.R);
-                    specularElem->QueryIntAttribute("G", &model.color.specular.G);
-                    specularElem->QueryIntAttribute("B", &model.color.specular.B);
+                    colorsubElem->QueryIntAttribute("R", &model.color.specular.R);
+                    colorsubElem->QueryIntAttribute("G", &model.color.specular.G);
+                    colorsubElem->QueryIntAttribute("B", &model.color.specular.B);
                 }
-                colorsubelemElem = colorElem->FirstChildElement("emissive");
+                colorsubElem = colorElem->FirstChildElement("emissive");
                 if (colorsubElem) {
-                    emissiveElem->QueryIntAttribute("R", &model.color.emissive.R);
-                    emissiveElem->QueryIntAttribute("G", &model.color.emissive.G);
-                    emissiveElem->QueryIntAttribute("B", &model.color.emissive.B);
+                    colorsubElem->QueryIntAttribute("R", &model.color.emissive.R);
+                    colorsubElem->QueryIntAttribute("G", &model.color.emissive.G);
+                    colorsubElem->QueryIntAttribute("B", &model.color.emissive.B);
                 }
-                colorsubelemElem = colorElem->FirstChildElement("shininess");
+                colorsubElem = colorElem->FirstChildElement("shininess");
                 if (colorsubElem) {
-                    shininessElem->QueryIntAttribute("value", &model.color.shininess);
+                    colorsubElem->QueryIntAttribute("value", &model.color.shininess);
                 }
             }
 
