@@ -93,11 +93,16 @@ struct Model {
     Color color;
 };
 
+struct ModelData {
+    std::vector<float> groupVertices;
+    std::vector<float> groupNormals;
+    std::vector<float> groupUvs;
+};
+
 struct Group {
     Transform transform; 
     GLuint renderVertices;
-    std::vector<float> groupVertices;
-    std::vector<float> groupNormals;
+    ModelData modelData;
     vector<Model> models;
     vector<Group> children;
 };
