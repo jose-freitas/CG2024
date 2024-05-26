@@ -5,8 +5,9 @@
 
 const std::string MODEL_PATH = "../../modelFiles/";
 
-std::vector<float> createModelsArray(std::vector<std::string> filenames){
+ModelData createModelsArray(std::vector<std::string> filenames){
 	std::vector<float> vertices;
+    ModelData modelData;
 
 	cout << "Loading .3d files..." << "\n";
 
@@ -25,12 +26,22 @@ std::vector<float> createModelsArray(std::vector<std::string> filenames){
 
 		cout << filename << "\n";
 
+        size_t totalVertices = vertices.size();
+        size_t pointCount = totalVertices * 3 / 8;
+
+        modelData.groupVertices.insert(modelData.groupVertices.end(), vertices.begin(), vertices.begin() + pointCount);
+        modelData.groupNormals.insert(modelData.groupNormals.end(), vertices.begin() + pointCount, vertices.begin() + pointCount * 2);
+        modelData.groupUvs.insert(modelData.groupUvs.end(), vertices.begin() + pointCount * 2, vertices.end());
+
 		file.close();
 	}
 
-	cout << "Finished loading .3d files! " << vertices.size() << " vertices!" << "\n";
+	cout << "Finished loading .3d files!\n";
+    cout << "Vertices: " << modelData.groupVertices.size() << "\n";
+    cout << "Normals: " << modelData.groupNormals.size() << "\n";
+    cout << "Uvs: " << modelData.groupUvs.size() << "\n";
 
-	return vertices;
+	return modelData;
 }
 
 void parseGroup (XMLElement* groupElem, Group& group) {
@@ -166,7 +177,7 @@ void parseGroup (XMLElement* groupElem, Group& group) {
     }
 
     // model vertices
-    group.groupVertices = createModelsArray(filenames);
+    group.modelData = createModelsArray(filenames);
 
     // recursive parsing groups
     for (XMLElement* childGroupElem = groupElem->FirstChildElement("group"); childGroupElem; childGroupElem = childGroupElem->NextSiblingElement("group")) {
