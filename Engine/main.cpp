@@ -32,8 +32,6 @@ float frames;
 float lastTime = 0.0f;
 float deltaTime = 0.0f;
 
-std::vector<GLuint> renderVertices; // VBOs for groups
-
 float elapsedTime = 0.0f;
 
 
@@ -43,20 +41,78 @@ void spherical2Cartesian() {
     worldSettings.camera.position.z = radius * cos(bet) * cos(alfa);
 }
 
+int loadTexture(std::string s) {
+
+	unsigned int t,tw,th;
+	unsigned char *texData;
+	unsigned int texID;
+
+	ilInit();
+	ilEnable(IL_ORIGIN_SET);
+	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
+	ilGenImages(1,&t); 
+	ilBindImage(t);
+	ilLoadImage((ILstring)s.c_str());
+	tw = ilGetInteger(IL_IMAGE_WIDTH);
+	th = ilGetInteger(IL_IMAGE_HEIGHT);
+	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+	texData = ilGetData();
+
+	glGenTextures(1,&texID);
+	
+	glBindTexture(GL_TEXTURE_2D,texID);
+	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_S,		GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_T,		GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MAG_FILTER,   	GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+		
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return texID;
+
+}
+
 void initVBO(Group& group) {
-    if (!group.groupVertices.empty())
+    // LOOP THROUGH EACH MODEL
+    for (int i = 0; i < group.models.size(); i++) 
     {
-        int vertexCount = group.groupVertices.size() / 3;
-        GLuint renderVerticesId;
-        GLuint renderNormalsId;
-        glGenBuffers(1, &renderVerticesId);
-        glBindBuffer(GL_ARRAY_BUFFER, renderVerticesId);
-        glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float) * 3, group.groupVertices.data(), GL_STATIC_DRAW);
-        group.renderVertices = renderVerticesId; // Store the VBO ID in the group
-        renderVertices.push_back(renderVerticesId); // Store the VBO ID in the global vector
-        glGenBuffers(1, &renderNormalsId);
-        glBindBuffer(GL_ARRAY_BUFFER, renderNormalsId);
-	    //glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float) * 3, n,  GL_STATIC_DRAW); qual o n?
+        Model model = group.models[i];
+        
+        // INIT MODEL VBOs
+        if (!model.modelData.modelVertices.empty())
+        {
+            int vertexCount = model.modelData.modelVertices.size() / 3;
+            GLuint renderVerticesId;
+            GLuint renderNormalsId;
+            GLuint renderUvsId;
+
+            glGenBuffers(1, &renderVerticesId);
+            glBindBuffer(GL_ARRAY_BUFFER, renderVerticesId);
+            glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float) * 3, model.modelData.modelVertices.data(), GL_STATIC_DRAW);
+
+            glGenBuffers(1, &renderNormalsId);
+            glBindBuffer(GL_ARRAY_BUFFER, renderNormalsId);
+            glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float) * 3, model.modelData.modelNormals.data(),  GL_STATIC_DRAW); 
+
+            glGenBuffers(1, &renderUvsId);
+            glBindBuffer(GL_ARRAY_BUFFER, renderUvsId);
+            glBufferData(GL_ARRAY_BUFFER, vertexCount * sizeof(float) * 2, model.modelData.modelUvs.data(),  GL_STATIC_DRAW); 
+
+            // Store the VBO ID in the model
+            model.renderVertices = renderVerticesId; 
+            model.renderNormals = renderNormalsId; 
+            model.renderUvs = renderUvsId; 
+        }
+
+        // INIT MODEL TEXTURE
+        if(model.texture.file != "")
+        {
+            model.texture.texID = loadTexture(model.texture.file);
+        }
     }
 
     // Recursively initialize VBOs for children groups
@@ -132,8 +188,6 @@ void renderGroup(Group& group, vector<Group *> parentGroups) {
     
     elapsedTime = glutGet(GLUT_ELAPSED_TIME) / 1000.0f; // Convert to seconds
 
-    int vertexCount = group.groupVertices.size() / 3;
-
     // Transform Translate points to Multidimensional Array
     int point_count = group.transform.translate.points.size();
 
@@ -166,21 +220,76 @@ void renderGroup(Group& group, vector<Group *> parentGroups) {
 
     TransformGroup(group);
 
-    // Draw Shapes
-    if (!group.groupVertices.empty()) { // Check if vertices exist
-        glBindBuffer(GL_ARRAY_BUFFER, group.renderVertices);
-        glVertexPointer(3, GL_FLOAT, 0, nullptr);
-        glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+    // LOOP THROUGH EACH MODEL
+    for (int i = 0; i < group.models.size(); i++) 
+    {
+        Model model = group.models[i];
+
+        int vertexCount = model.modelData.modelVertices.size() / 3;
+
+        // DRAW MODEL
+        if (!model.modelData.modelVertices.empty()) { // Check if vertices exist
+            float shiny[1] = { (float) model.color.shininess };
+
+	        glMaterialfv(GL_FRONT, GL_AMBIENT, model.color.ambient.ToFloats());
+            glMaterialfv(GL_FRONT, GL_DIFFUSE, model.color.diffuse.ToFloats());
+            glMaterialfv(GL_FRONT, GL_SPECULAR, model.color.specular.ToFloats());
+            glMaterialfv(GL_FRONT, GL_EMISSION, model.color.emissive.ToFloats());
+            glMaterialfv(GL_FRONT, GL_SHININESS, shiny);
+
+            glBindTexture(GL_TEXTURE_2D, model.texture.texID);
+
+            glBindBuffer(GL_ARRAY_BUFFER, model.renderVertices);
+            glVertexPointer(3, GL_FLOAT, 0, nullptr);
+
+            glBindBuffer(GL_ARRAY_BUFFER, model.renderNormals);
+            glNormalPointer(GL_FLOAT,0,0);
+
+            glBindBuffer(GL_ARRAY_BUFFER, model.renderUvs);
+            glTexCoordPointer(2,GL_FLOAT,0,0);
+
+            glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+
+            glBindTexture(GL_TEXTURE_2D, 0);
+        }
+
+        // Clean Transform Matrix
+        glPopMatrix();
+
+        parentGroups.push_back(&group);
     }
 
-    // Clean Transform Matrix
-    glPopMatrix();
-
-    parentGroups.push_back(&group);
-    
     // Render Group Children
     for(int i = 0; i < group.children.size(); i++) {
         renderGroup(group.children[i], parentGroups);
+    }
+}
+
+void renderLights(std::vector<Light> lights)
+{
+    for(int i = 0; i < GL_MAX_LIGHTS; i++) 
+    {
+        if ((i + 1) > lights.size())
+            return;
+
+        Light light = lights[i];
+
+        if(light.type == "point")
+        {
+            glLightfv(i , GL_POSITION, light.position.ToFloats());
+        }
+        else if(light.type == "directional")
+        {
+            glLightfv(i , GL_POSITION, light.direction.ToFloats());
+        }
+        else if(light.type == "spotlight")
+        {
+            float cuty[1] = { light.cutoff };
+
+            glLightfv(i , GL_POSITION, light.position.ToFloats());
+            glLightfv(i , GL_SPOT_DIRECTION, light.direction.ToFloats());
+            glLightfv(i , GL_SPOT_CUTOFF, cuty);
+        }
     }
 }
 
@@ -203,26 +312,19 @@ void renderAxis () {
 }
 
 void renderScene() {
-    float pos[4] = {1.0, 1.0, 1.0, 0.0};
-	float dark[] = { 0.7, 0.1, 0.8, 1.0 };
-	float white[] = { 1.0, 1.0, 1.0, 1.0 };
-	float red[] = { 1.0, 0.2, 0.6, 1.0 };
 
     // Clear buffers
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    //Light
-    glLightfv(GL_LIGHT0, GL_POSITION, pos);
-	glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, red);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, white);
-	glMaterialf(GL_FRONT, GL_SHININESS, 128);
 
     // Set the Camera
     setCamera(worldSettings.camera);
 
     // Rendering
     renderAxis();
+
+    // Set the Lights
+    renderLights(worldSettings.lights);
 
     Coords emptyCoords = Coords { 0.0f, 0.0f, 0.0f };
 
@@ -234,7 +336,6 @@ void renderScene() {
     };
 
     Texture baseTexture = Texture {/*base values*/};
-
     Light baseLight = {/*base values*/};
 
     //renderGroup(worldSettings.root, baseTransform);
@@ -317,43 +418,6 @@ void printInfo() {
     printf("Page Up and Page Down control the distance from the camera to the origin\n");
 }
 
-
-int loadTexture(std::string s) {
-
-	unsigned int t,tw,th;
-	unsigned char *texData;
-	unsigned int texID;
-
-	ilInit();
-	ilEnable(IL_ORIGIN_SET);
-	ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
-	ilGenImages(1,&t); 
-	ilBindImage(t);
-	ilLoadImage((ILstring)s.c_str());
-	tw = ilGetInteger(IL_IMAGE_WIDTH);
-	th = ilGetInteger(IL_IMAGE_HEIGHT);
-	ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-	texData = ilGetData();
-
-	glGenTextures(1,&texID);
-	
-	glBindTexture(GL_TEXTURE_2D,texID);
-	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_S,		GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_WRAP_T,		GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MAG_FILTER,   	GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D,	GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tw, th, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	return texID;
-
-}
-
-
 int main(int argc, char **argv) {
 
 	// Parse XML Settings
@@ -388,6 +452,8 @@ int main(int argc, char **argv) {
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_CULL_FACE);
 
+    glEnable(GL_RESCALE_NORMAL); // check
+
     // init Lighting
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -403,6 +469,9 @@ int main(int argc, char **argv) {
 
     // controls global ambient light
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
+
+    float amb[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
 
     //init
     glEnableClientState(GL_VERTEX_ARRAY);

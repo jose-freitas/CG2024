@@ -3,6 +3,7 @@
 
 CMakeFiles/generator.dir/main.cpp.o
  /home/ika/Documents/Universidade/CG2024/Generator/main.cpp
+ /home/ika/Documents/Universidade/CG2024/Generator/include/generator.hpp
  /home/ika/Documents/Universidade/CG2024/Generator/bezier.cpp
  /home/ika/Documents/Universidade/CG2024/Generator/box.cpp
  /home/ika/Documents/Universidade/CG2024/Generator/cone.cpp

@@ -39,6 +39,15 @@ struct Coords {
             z = z * coords.z
         };
     }
+
+    float *ToFloats () {
+            float *floats = new float[4];
+            floats[0] = x;
+            floats[1] = y;
+            floats[2] = z;
+            floats[3] = 0.0f;
+            return floats;
+    }
 };
 
 struct Translate {
@@ -72,37 +81,50 @@ struct Camera {
 struct Color {
     struct RGB {
         int R, G, B;
+
+        float *ToFloats () {
+            float *floats = new float[4];
+            floats[0] = R / 255.0f;
+            floats[1] = G / 255.0f;
+            floats[2] = B / 255.0f;
+            floats[3] = 1.0f;
+            return floats;
+        }
     } diffuse, ambient, specular, emissive;
     int shininess;
 };
 
 struct Texture {
     string file;
+    GLuint texID;
 };
 
 struct Light {
     string type;
     Coords position;
     Coords direction;
+
     float cutoff;
+};
+
+struct ModelData {
+    std::vector<float> modelVertices;
+    std::vector<float> modelNormals;
+    std::vector<float> modelUvs;
 };
 
 struct Model {
     string mod;
     Texture texture;
     Color color;
-};
-
-struct ModelData {
-    std::vector<float> groupVertices;
-    std::vector<float> groupNormals;
-    std::vector<float> groupUvs;
+    GLuint renderVertices;
+    GLuint renderNormals;
+    GLuint renderUvs;
+    ModelData modelData;
 };
 
 struct Group {
     Transform transform; 
-    GLuint renderVertices;
-    ModelData modelData;
     vector<Model> models;
     vector<Group> children;
 };

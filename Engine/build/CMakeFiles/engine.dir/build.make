@@ -92,18 +92,13 @@ engine_EXTERNAL_OBJECTS =
 
 engine: CMakeFiles/engine.dir/main.cpp.o
 engine: CMakeFiles/engine.dir/build.make
+engine: /usr/lib/x86_64-linux-gnu/libGLEW.so
+engine: /usr/lib/x86_64-linux-gnu/libIL.so
 engine: /usr/lib/x86_64-linux-gnu/libGL.so
 engine: /usr/lib/x86_64-linux-gnu/libGLU.so
 engine: /usr/lib/x86_64-linux-gnu/libglut.so
 engine: /usr/lib/x86_64-linux-gnu/libXmu.so
 engine: /usr/lib/x86_64-linux-gnu/libXi.so
-engine: /usr/lib/x86_64-linux-gnu/libGLEW.so
-engine: /usr/lib/x86_64-linux-gnu/libGL.so
-engine: /usr/lib/x86_64-linux-gnu/libGLU.so
-engine: /usr/lib/x86_64-linux-gnu/libglut.so
-engine: /usr/lib/x86_64-linux-gnu/libXmu.so
-engine: /usr/lib/x86_64-linux-gnu/libXi.so
-engine: /usr/lib/x86_64-linux-gnu/libGLEW.so
 engine: CMakeFiles/engine.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ika/Documents/Universidade/CG2024/Engine/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable engine"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/engine.dir/link.txt --verbose=$(VERBOSE)

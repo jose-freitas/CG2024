@@ -1,3 +1,6 @@
+
+#include "./include/generator.hpp"
+
 #include "plane.cpp"
 #include "box.cpp"
 #include "cone.cpp"
@@ -13,12 +16,26 @@
 
 const std::string MODEL_PATH = "../../modelFiles/";
 
-void writeFile (std::vector<float> vertices, std::vector<float> normals, std::vector<float> texCoord, std::string filename){
+
+void writeFile (ModelData modelData, std::string filename){
 
     std::ofstream file = std::ofstream(MODEL_PATH+filename);
 
-    for(int i = 0; i < vertices.size(); i++){
-        file << vertices[i];
+    std::cout << "Vertices Size = " << modelData.vertices.size() << "\n";
+
+    for(int i = 0; i < modelData.vertices.size(); i++){
+
+        file << modelData.vertices[i];
+
+        if ((i + 1) % 9 == 0)
+            file << "\n";
+        else 
+            file << " ";
+    }
+    
+
+    for(int i = 0; i < modelData.normals.size(); i++){
+        file << modelData.normals[i];
 
         if ((i + 1) % 9 == 0)
             file << "\n";
@@ -26,19 +43,10 @@ void writeFile (std::vector<float> vertices, std::vector<float> normals, std::ve
             file << " ";
     }
 
-    for(int i = 0; i < normals.size(); i++){
-        file << normals[i];
+    for(int i = 0; i < modelData.texCoord.size(); i++){
+        file << modelData.texCoord[i];
 
-        if ((i + 1) % 9 == 0)
-            file << "\n";
-        else 
-            file << " ";
-    }
-
-    for(int i = 0; i < texCoord.size(); i++){
-        file << normals[i];
-
-        if ((i + 1) % 9 == 0)
+        if ((i + 1) % 6 == 0)
             file << "\n";
         else 
             file << " ";
@@ -63,18 +71,18 @@ int main(int argc, char **argv) {
         int divisions = std::stoi(argv[3]);
         std::string filename = std::string(argv[4]);
 
-        std::vector<float> vertices, normals, texCoord = plane(dimension, divisions);
+        ModelData modelData = plane(dimension, divisions);
 
-        writeFile(vertices, normals, texCoord, filename);
+        writeFile(modelData, filename);
     }
     else if("box" == type){
         float dimension = std::stof(argv[2]);
         int divisions = std::stoi(argv[3]);
         std::string filename = std::string(argv[4]);
 
-        std::vector<float> vertices, normals, texCoord = box(dimension, divisions);
+         ModelData modelData = box(dimension, divisions);
 
-        writeFile(vertices, normals, texCoord, filename);
+        writeFile(modelData, filename);
     }
     else if("cone" == type){
         float radius = std::stof(argv[2]);
@@ -83,9 +91,9 @@ int main(int argc, char **argv) {
         int stacks = std::stoi(argv[5]);
         std::string filename = std::string(argv[6]);
 
-        std::vector<float> vertices, normals, texCoord = cone(radius, height, slices, stacks);
+        ModelData modelData = cone(radius, height, slices, stacks);
 
-        writeFile(vertices, normals, texCoord, filename);
+        writeFile(modelData, filename);
     }
     else if("sphere" == type){
         float radius = std::stof(argv[2]);
@@ -93,18 +101,18 @@ int main(int argc, char **argv) {
         int stacks = std::stoi(argv[4]);
         std::string filename = std::string(argv[5]);
 
-        std::vector<float> vertices, normals, texCoord = sphere(radius, slices, stacks);
+        ModelData modelData = sphere(radius, slices, stacks);
 
-        writeFile(vertices, normals, texCoord, filename);
+        writeFile(modelData, filename);
     }
     else if("patch" == type){
         std::string input_file = argv[2]; 
         int tesselation = std::stoi(argv[3]); 
         std::string filename = std::string(argv[4]); 
 
-        std::vector<float> vertices, normals, texCoord = bezier(input_file, tesselation);
+        ModelData modelData = bezier(input_file, tesselation);
 
-        writeFile(vertices, normals, texCoord, filename);
+        writeFile(modelData, filename);
     } 
     else if("torus" == type){
 
@@ -114,9 +122,9 @@ int main(int argc, char **argv) {
 		int stacks = atoi(argv[5]);
         std::string filename = std::string(argv[6]); 
 
-        std::vector<float> vertices, normals, texCoord = torus(inner_radius, outer_radius, slices, stacks);
+        ModelData modelData = torus(inner_radius, outer_radius, slices, stacks);
 
-        writeFile(vertices, normals, texCoord, filename);
+        writeFile(modelData, filename);
     } 
     else {
         std::cout << "No model type selected!\n";

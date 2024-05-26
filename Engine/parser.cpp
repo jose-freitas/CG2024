@@ -5,41 +5,40 @@
 
 const std::string MODEL_PATH = "../../modelFiles/";
 
-ModelData createModelsArray(std::vector<std::string> filenames){
-	std::vector<float> vertices;
+ModelData createModelData (std::string filename){
+
     ModelData modelData;
 
-	cout << "Loading .3d files..." << "\n";
+	std::vector<float> vertices;
 
-	for(int i = 0; i < filenames.size(); i++){
 
-		std::string filename = filenames[i];
+	cout << "Loading .3d file... " << filename << "\n";
 
-		std::ifstream file = std::ifstream(MODEL_PATH + filename);
 
-		float coordinate;
+    std::ifstream file = std::ifstream(MODEL_PATH + filename);
 
-		while(file >> coordinate){
-			//cout << coordinate << "\n"; // DEBUG
-			vertices.push_back(coordinate);
-		}
+    float coordinate;
 
-		cout << filename << "\n";
+    while(file >> coordinate){
+        //cout << coordinate << "\n"; // DEBUG
+        vertices.push_back(coordinate);
+    }
 
-        size_t totalVertices = vertices.size();
-        size_t pointCount = totalVertices * 3 / 8;
+    cout << filename << "\n";
 
-        modelData.groupVertices.insert(modelData.groupVertices.end(), vertices.begin(), vertices.begin() + pointCount);
-        modelData.groupNormals.insert(modelData.groupNormals.end(), vertices.begin() + pointCount, vertices.begin() + pointCount * 2);
-        modelData.groupUvs.insert(modelData.groupUvs.end(), vertices.begin() + pointCount * 2, vertices.end());
+    size_t totalVertices = vertices.size();
+    size_t pointCount = totalVertices * 3 / 8;
 
-		file.close();
-	}
+    modelData.modelVertices.insert(modelData.modelVertices.end(), vertices.begin(), vertices.begin() + pointCount);
+    modelData.modelNormals.insert(modelData.modelNormals.end(), vertices.begin() + pointCount, vertices.begin() + pointCount * 2);
+    modelData.modelUvs.insert(modelData.modelUvs.end(), vertices.begin() + pointCount * 2, vertices.end());
 
-	cout << "Finished loading .3d files!\n";
-    cout << "Vertices: " << modelData.groupVertices.size() << "\n";
-    cout << "Normals: " << modelData.groupNormals.size() << "\n";
-    cout << "Uvs: " << modelData.groupUvs.size() << "\n";
+    file.close();
+
+	cout << "Finished loading " << filename << "\n";
+    cout << "Vertices: " << modelData.modelVertices.size() << "\n";
+    cout << "Normals: " << modelData.modelNormals.size() << "\n";
+    cout << "Uvs: " << modelData.modelUvs.size() << "\n";
 
 	return modelData;
 }
@@ -123,9 +122,7 @@ void parseGroup (XMLElement* groupElem, Group& group) {
         group.transform.scale = Coords { 1.0f, 1.0f, 1.0f };
     }
 
-    // model filenames
-    std::vector<std::string> filenames;
-
+    // MODELS
     XMLElement* modelsElem = groupElem->FirstChildElement("models");
     if (modelsElem) {
         Model model;
@@ -171,13 +168,13 @@ void parseGroup (XMLElement* groupElem, Group& group) {
                 }
             }
 
+            // Data
+            model.modelData = createModelData(model.mod);
+
+            // Assign
             group.models.push_back(model);
-            filenames.push_back(model.mod);
         }
     }
-
-    // model vertices
-    group.modelData = createModelsArray(filenames);
 
     // recursive parsing groups
     for (XMLElement* childGroupElem = groupElem->FirstChildElement("group"); childGroupElem; childGroupElem = childGroupElem->NextSiblingElement("group")) {
@@ -244,11 +241,7 @@ void parser (const char* file, World& world) {
             }
         }
     
-
-        elem = elem->NextSiblingElement();
-    }
-
-    // Lights
+        // Lights
         if (strcmp(elem->Name(), "lights") == 0) {
             for (XMLElement* lightElem = elem->FirstChildElement("light"); lightElem; lightElem = lightElem->NextSiblingElement("light")) {
                 Light light;
@@ -269,6 +262,10 @@ void parser (const char* file, World& world) {
                 world.lights.push_back(light);
             }
         }
+
+        elem = elem->NextSiblingElement();
+    }
+
 
     // Groups
     parseGroup(base->FirstChildElement("group"), world.root);

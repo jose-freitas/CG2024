@@ -4,10 +4,15 @@
 #include <vector>
 
 
-std::vector<float> sphere(float radius, int slices, int stacks) {
+
+ModelData sphere(float radius, int slices, int stacks) {
+
+    ModelData modelData;
+
+    //Vector creation
     std::vector<float> vertices;
-    std::vector<float> normals;
-    std::vector<float> texCoord;
+	std::vector<float> normals;
+	std::vector<float> texCoord;
     
 
     float deltaPhi = (float)(M_PI) / stacks;
@@ -30,6 +35,9 @@ std::vector<float> sphere(float radius, int slices, int stacks) {
 			normals.push_back(cos(phi));
 			normals.push_back(sin(phi) * sin(theta));
 
+            texCoord.push_back((float)j/slices);
+            texCoord.push_back((float)i/stacks);
+
 
             vertices.push_back(radius * sin(phi) * cos(nextTheta));
             vertices.push_back(radius * cos(phi));
@@ -39,6 +47,9 @@ std::vector<float> sphere(float radius, int slices, int stacks) {
 			normals.push_back(cos(phi));
 			normals.push_back(sin(phi) * sin(nextTheta));
 
+            texCoord.push_back((float)(j+1)/slices);
+            texCoord.push_back((float)i/stacks);
+
 
             vertices.push_back(radius * sin(nextPhi) * cos(theta));
             vertices.push_back(radius * cos(nextPhi));
@@ -47,6 +58,9 @@ std::vector<float> sphere(float radius, int slices, int stacks) {
             normals.push_back(sin(nextPhi) * cos(theta));
 			normals.push_back(cos(nextPhi));
 			normals.push_back(sin(nextPhi) * sin(theta));
+
+            texCoord.push_back((float)j/slices);
+            texCoord.push_back((float)(i+1)/stacks);
 
 
             // Segundo triângulo do quadrilátero
@@ -58,6 +72,9 @@ std::vector<float> sphere(float radius, int slices, int stacks) {
 			normals.push_back(cos(nextPhi));
 			normals.push_back(sin(nextPhi) * sin(theta));
 
+            texCoord.push_back((float)(j+1)/slices);
+            texCoord.push_back((float)(i+1)/stacks);
+
 
             vertices.push_back(radius * sin(phi) * cos(nextTheta));
             vertices.push_back(radius * cos(phi));
@@ -67,6 +84,9 @@ std::vector<float> sphere(float radius, int slices, int stacks) {
 			normals.push_back(cos(phi));
 			normals.push_back(sin(phi) * sin(nextTheta));
 
+            texCoord.push_back((float)j/slices);
+            texCoord.push_back((float)(i+1)/stacks);
+
 
             vertices.push_back(radius * sin(nextPhi) * cos(nextTheta));
             vertices.push_back(radius * cos(nextPhi));
@@ -75,7 +95,14 @@ std::vector<float> sphere(float radius, int slices, int stacks) {
             normals.push_back(sin(nextPhi) * cos(nextTheta));
 			normals.push_back(cos(nextPhi));
 			normals.push_back(sin(nextPhi) * sin(nextTheta));
+
+            texCoord.push_back((float)(j+1)/slices);
+            texCoord.push_back((float)i/stacks);
         }
     }
-    return vertices, normals, texCoord;
+    modelData.vertices = vertices;
+	modelData.normals = normals;
+	modelData.texCoord = texCoord;
+
+	return modelData;
 }

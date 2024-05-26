@@ -14,6 +14,7 @@ CMakeFiles/engine.dir/main.cpp.o
  /usr/include/GL/glew.h
  /usr/include/GL/glu.h
  /usr/include/GL/glut.h
+ /usr/include/IL/il.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h
  /usr/include/asm-generic/errno.h

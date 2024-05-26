@@ -3,7 +3,12 @@
 #include <stdio.h>
 #include <vector>
 
-std::vector<float> plane (float dimension, int divisions) {
+
+
+ModelData plane (float dimension, int divisions) {
+
+	ModelData modelData;
+
     //Vector creation
     std::vector<float> vertices;
 	std::vector<float> normals;
@@ -90,5 +95,9 @@ std::vector<float> plane (float dimension, int divisions) {
 		}
 	}
 
-	return vertices, normals, texCoord;
+	modelData.vertices = vertices;
+	modelData.normals = normals;
+	modelData.texCoord = texCoord;
+
+	return modelData;
 }

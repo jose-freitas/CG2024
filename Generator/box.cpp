@@ -3,8 +3,11 @@
 #include <stdio.h>
 #include <vector>
 
-std::vector<float> box (float dimension, int divisions) {
-    //criação do vector
+ModelData box (float dimension, int divisions) {
+
+    ModelData modelData;
+
+    //Vector creation
     std::vector<float> vertices;
 	std::vector<float> normals;
 	std::vector<float> texCoord;
@@ -370,5 +373,9 @@ std::vector<float> box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 		}
 	}
-	return vertices, normals, texCoord;
+	modelData.vertices = vertices;
+	modelData.normals = normals;
+	modelData.texCoord = texCoord;
+
+	return modelData;
 }

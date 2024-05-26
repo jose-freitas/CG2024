@@ -19,11 +19,16 @@
 #include <stdio.h>
 #include <vector>
 
-std::vector<float> cone(float radius, float height, int slices, int stacks) {
 
+
+ModelData cone(float radius, float height, int slices, int stacks) {
+
+    ModelData modelData;
+
+    //Vector creation
     std::vector<float> vertices;
-    std::vector<float> normals;
-    std::vector<float> texCoord;
+	std::vector<float> normals;
+	std::vector<float> texCoord;
 
 
     float deltaPhi = (float)(M_PI) / stacks;
@@ -43,6 +48,9 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
         normals.push_back(-1.0f);
         normals.push_back(0.0f);
 
+        texCoord.push_back((float) (i+1) /slices);
+        texCoord.push_back(0.0f);
+
 
 		vertices.push_back(radius * sin(alfa + delta));
         vertices.push_back(0.0f);
@@ -52,6 +60,9 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
         normals.push_back(-1.0f);
         normals.push_back(0.0f);
 
+        texCoord.push_back((float)i /slices);
+        texCoord.push_back(0.0f);
+
         
         vertices.push_back(radius * sin(alfa));
         vertices.push_back(0.0f);
@@ -60,6 +71,9 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
         normals.push_back(0.0f);
         normals.push_back(-1.0f);
         normals.push_back(0.0f);
+
+        texCoord.push_back(0.5f);
+        texCoord.push_back(0.5f);
     }
 
 
@@ -87,6 +101,9 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
 			normals.push_back(cos(phi));
 			normals.push_back(sin(phi) * sin(alfa));
 
+            texCoord.push_back((float)j/slices);
+            texCoord.push_back((float)i/stacks);
+
 
             vertices.push_back(r * sin(alfa + delta));
             vertices.push_back(y);
@@ -95,6 +112,9 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
             normals.push_back(sin(phi) * cos(nextAlfa));
 			normals.push_back(cos(phi));
 			normals.push_back(sin(phi) * sin(nextAlfa));
+
+            texCoord.push_back((float)(j+1) / slices);
+            texCoord.push_back((float)i / stacks);
 
 
             vertices.push_back((next_r * sin(alfa)));
@@ -105,6 +125,9 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
 			normals.push_back(cos(nextPhi));
 			normals.push_back(sin(nextPhi) * sin(alfa));
 
+            texCoord.push_back((float)j / slices);
+            texCoord.push_back((float)(i+1) / stacks);
+
 
             vertices.push_back(next_r * sin(alfa));
             vertices.push_back(next_y);
@@ -113,6 +136,9 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
             normals.push_back(sin(nextPhi) * cos(alfa));
 			normals.push_back(cos(nextPhi));
 			normals.push_back(sin(nextPhi) * sin(alfa));
+
+            texCoord.push_back((float)j / slices);
+            texCoord.push_back((float)(i+1) / stacks);
 
 
             vertices.push_back(r * sin(alfa + delta));
@@ -123,6 +149,9 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
 			normals.push_back(cos(phi));
 			normals.push_back(sin(phi) * sin(nextAlfa));
 
+            texCoord.push_back((float)(j+1) / slices);
+            texCoord.push_back((float)i / stacks);
+
 
             vertices.push_back(next_r * sin(alfa + delta));
             vertices.push_back(next_y);
@@ -131,8 +160,16 @@ std::vector<float> cone(float radius, float height, int slices, int stacks) {
             normals.push_back(sin(nextPhi) * cos(nextAlfa));
 			normals.push_back(cos(nextPhi));
 			normals.push_back(sin(nextPhi) * sin(nextAlfa));
+
+            texCoord.push_back((float)(j+1) / slices);
+            texCoord.push_back((float)(i+1) / stacks);
         }
     }
-    return vertices, normals, texCoord;
+    modelData.vertices = vertices;
+	modelData.normals = normals;
+	modelData.texCoord = texCoord;
+
+	return modelData;
 }
+
 
