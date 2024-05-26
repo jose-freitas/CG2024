@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/ika/Documents/Universidade/CG2024/Engine/ยง{IL_INCLUDE_DIR}
+CXX_INCLUDES = -I/usr/include/IL
 
 CXX_FLAGS = 
 

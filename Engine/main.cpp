@@ -35,6 +35,22 @@ float deltaTime = 0.0f;
 float elapsedTime = 0.0f;
 
 
+void checkGLError(const char* stmt, const char* fname, int line)
+{
+    GLenum err = glGetError();
+    if (err != GL_NO_ERROR)
+    {
+        //std::cerr << "OpenGL error " << err << ", at " << fname << ":" << line << " - for " << stmt << std::endl; // UNCOMMENT TO DEBUG OPENGL
+        // Optionally, exit or abort the program
+    }
+}
+
+#define GL_CHECK(stmt) do { \
+    stmt; \
+    checkGLError(#stmt, __FILE__, __LINE__); \
+} while (0)
+
+
 void spherical2Cartesian() {
     worldSettings.camera.position.x = radius * cos(bet) * sin(alfa);
     worldSettings.camera.position.y = radius * sin(bet);
@@ -80,7 +96,7 @@ void initVBO(Group& group) {
     // LOOP THROUGH EACH MODEL
     for (int i = 0; i < group.models.size(); i++) 
     {
-        Model model = group.models[i];
+        Model& model = group.models[i];
         
         // INIT MODEL VBOs
         if (!model.modelData.modelVertices.empty())
@@ -121,6 +137,7 @@ void initVBO(Group& group) {
     }
     
 }
+
 
 void renderCatmullRomCurve(float **p, int point_count) {
 
@@ -229,6 +246,7 @@ void renderGroup(Group& group, vector<Group *> parentGroups) {
 
         // DRAW MODEL
         if (!model.modelData.modelVertices.empty()) { // Check if vertices exist
+
             float shiny[1] = { (float) model.color.shininess };
 
 	        glMaterialfv(GL_FRONT, GL_AMBIENT, model.color.ambient.ToFloats());
@@ -239,25 +257,26 @@ void renderGroup(Group& group, vector<Group *> parentGroups) {
 
             glBindTexture(GL_TEXTURE_2D, model.texture.texID);
 
-            glBindBuffer(GL_ARRAY_BUFFER, model.renderVertices);
-            glVertexPointer(3, GL_FLOAT, 0, nullptr);
+            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, model.renderVertices));
+            GL_CHECK(glVertexPointer(3, GL_FLOAT, 0, 0));
 
-            glBindBuffer(GL_ARRAY_BUFFER, model.renderNormals);
-            glNormalPointer(GL_FLOAT,0,0);
+            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, model.renderNormals));
+            GL_CHECK(glNormalPointer(GL_FLOAT,0,0));
 
-            glBindBuffer(GL_ARRAY_BUFFER, model.renderUvs);
-            glTexCoordPointer(2,GL_FLOAT,0,0);
+            GL_CHECK(glBindBuffer(GL_ARRAY_BUFFER, model.renderUvs));
+            GL_CHECK(glTexCoordPointer(2,GL_FLOAT,0,0));
 
-            glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+            GL_CHECK(glDrawArrays(GL_TRIANGLES, 0, vertexCount));
 
             glBindTexture(GL_TEXTURE_2D, 0);
         }
 
-        // Clean Transform Matrix
-        glPopMatrix();
-
-        parentGroups.push_back(&group);
     }
+    
+    // Clean Transform Matrix
+    glPopMatrix();
+
+    parentGroups.push_back(&group);
 
     // Render Group Children
     for(int i = 0; i < group.children.size(); i++) {
@@ -440,10 +459,13 @@ int main(int argc, char **argv) {
     // Callback registration
     glutSpecialFunc(processSpecialKeys);
 
-	#ifndef _APPLE
-    //init GLEW
-		glewInit();
-	#endif
+    #ifndef _APPLE
+    if (glewInit() != GLEW_OK) {
+        std::cerr << "Failed to initialize GLEW" << std::endl;
+        return -1;
+    }
+    #endif
+
 
     // Init VBO
     initVBO(worldSettings.root);

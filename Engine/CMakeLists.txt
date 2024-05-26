@@ -29,7 +29,7 @@ if (NOT WIN32)
 
 	find_package(DevIL REQUIRED)
 	link_libraries(${IL_LIBRARIES} )
-	include_directories(ยง{IL_INCLUDE_DIR})
+	include_directories(${IL_INCLUDE_DIR})
 endif(NOT WIN32)	
 	
 find_package(OpenGL REQUIRED)
@@ -38,9 +38,6 @@ link_directories(${OpenGL_LIBRARY_DIRS})
 add_definitions(${OpenGL_DEFINITIONS})
 
 add_executable(${PROJECT_NAME} main.cpp)
-
-# file(COPY ${CMAKE_SOURCE_DIR}/Oil_Drum001h.jpg DESTINATION ${CMAKE_BINARY_DIR})
-# file(COPY ${CMAKE_SOURCE_DIR}/Concrete.jpg DESTINATION ${CMAKE_BINARY_DIR})
 
 if (WIN32)
 	target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} glut32 glew32 DevIL)
