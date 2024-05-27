@@ -10,6 +10,12 @@ CMakeFiles/generator.dir/main.cpp.o
  /home/ika/Documents/Universidade/CG2024/Generator/plane.cpp
  /home/ika/Documents/Universidade/CG2024/Generator/sphere.cpp
  /home/ika/Documents/Universidade/CG2024/Generator/torus.cpp
+ /usr/include/GL/freeglut_std.h
+ /usr/include/GL/gl.h
+ /usr/include/GL/glext.h
+ /usr/include/GL/glu.h
+ /usr/include/GL/glut.h
+ /usr/include/KHR/khrplatform.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h
  /usr/include/asm-generic/errno.h
@@ -76,6 +82,7 @@ CMakeFiles/generator.dir/main.cpp.o
  /usr/include/c++/13/bits/uses_allocator_args.h
  /usr/include/c++/13/bits/utility.h
  /usr/include/c++/13/bits/vector.tcc
+ /usr/include/c++/13/bitset
  /usr/include/c++/13/cctype
  /usr/include/c++/13/cerrno
  /usr/include/c++/13/clocale
@@ -105,6 +112,7 @@ CMakeFiles/generator.dir/main.cpp.o
  /usr/include/c++/13/ostream
  /usr/include/c++/13/pstl/pstl_config.h
  /usr/include/c++/13/stdexcept
+ /usr/include/c++/13/stdlib.h
  /usr/include/c++/13/streambuf
  /usr/include/c++/13/string
  /usr/include/c++/13/string_view
@@ -136,6 +144,7 @@ CMakeFiles/generator.dir/main.cpp.o
  /usr/include/pthread.h
  /usr/include/sched.h
  /usr/include/stdc-predef.h
+ /usr/include/stdint.h
  /usr/include/stdio.h
  /usr/include/stdlib.h
  /usr/include/time.h
@@ -169,6 +178,7 @@ CMakeFiles/generator.dir/main.cpp.o
  /usr/include/x86_64-linux-gnu/bits/select.h
  /usr/include/x86_64-linux-gnu/bits/setjmp.h
  /usr/include/x86_64-linux-gnu/bits/stdint-intn.h
+ /usr/include/x86_64-linux-gnu/bits/stdint-uintn.h
  /usr/include/x86_64-linux-gnu/bits/stdio_lim.h
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h
  /usr/include/x86_64-linux-gnu/bits/struct_mutex.h
@@ -231,4 +241,5 @@ CMakeFiles/generator.dir/main.cpp.o
  /usr/include/x86_64-linux-gnu/sys/types.h
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stdarg.h
  /usr/lib/gcc/x86_64-linux-gnu/13/include/stddef.h
+ /usr/lib/gcc/x86_64-linux-gnu/13/include/stdint.h
 

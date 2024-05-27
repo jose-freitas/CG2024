@@ -21,7 +21,7 @@
 #include "catmullrom.cpp"
 
 
-float alfa = 0.0f, bet = 0.0f, radius = 5.0f;
+float alfa = 0.0f, bet = 0.0f, radius = 20.0f;
 float TESSELLATION = 100.0f;
 
 World worldSettings;
@@ -358,7 +358,6 @@ void renderScene() {
 
     // Rendering
     renderAxis();
-
 
     Coords emptyCoords = Coords { 0.0f, 0.0f, 0.0f };
 

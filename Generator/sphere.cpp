@@ -5,7 +5,8 @@
 
 
 
-ModelData sphere(float radius, int slices, int stacks) {
+ModelData sphere(float radius, int slices, int stacks)
+{
 
     ModelData modelData;
 

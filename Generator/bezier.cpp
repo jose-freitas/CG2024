@@ -79,7 +79,8 @@ void getBezierPoint(float u, float v, float (*points)[3], float* pos, float* du,
 }
 
 
-ModelData bezier(const std::string& input_file,int tesselation) {
+ModelData bezier(const std::string& input_file,int tesselation)
+{
     ModelData modelData;
 
     //Vector creation

@@ -162,3 +162,4 @@ ModelData cone(float radius, float height, int slices, int stacks) {
 	modelData.texCoord = texCoord;
 
 	return modelData;
+}
