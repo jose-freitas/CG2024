@@ -295,7 +295,6 @@ void renderLights(std::vector<Light> lights)
             float* pos = light.position.ToFloats();
             pos[4] = 1.0f;
             glLightfv(GL_LIGHT0 + i , GL_POSITION, pos);
-  
         }
         else if(light.type == "directional")
         {
@@ -480,9 +479,13 @@ int main(int argc, char **argv) {
     }
     #endif
 
+    //init
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-    // Init VBO
-    initVBO(worldSettings.root);
+    //Texturas
+    glEnable(GL_TEXTURE_2D);
 
 	//  OpenGL settings
 	glEnable(GL_DEPTH_TEST);
@@ -493,31 +496,29 @@ int main(int argc, char **argv) {
     // init Lighting
     glEnable(GL_LIGHTING);
 
+    
+    float dark[4] = {0.2, 0.2, 0.2, 1.0};
+    float white[4] = {1.0, 1.0, 1.0, 1.0};
+    float black[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+
+
     for(int i = 0; i < worldSettings.lights.size(); i++) 
     {
+        std::cout << "Setting Light " << i << "\n";
+
+        glLightfv(GL_LIGHT0 + i, GL_AMBIENT, dark);
+        glLightfv(GL_LIGHT0 + i, GL_DIFFUSE, white);
+        glLightfv(GL_LIGHT0 + i, GL_SPECULAR, white);
+
         glEnable(GL_LIGHT0 + i);
-
-        float dark[4] = {0.2, 0.2, 0.2, 1.0};
-        float white[4] = {1.0, 1.0, 1.0, 1.0};
-        float black[4] = {0.0f, 0.0f, 0.0f, 0.0f};
-
-        glLightfv(GL_LIGHT0+ i, GL_AMBIENT, dark);
-        glLightfv(GL_LIGHT0+ i, GL_DIFFUSE, white);
-        glLightfv(GL_LIGHT0+ i, GL_SPECULAR, white);
     }
 
-    //float amb[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	//glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
 
-    //init
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_NORMAL_ARRAY);
-    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-    //Texturas
-    glEnable(GL_TEXTURE_2D);
-
-    //texIDFigura = loadTexture("NomeDaTextura.jpg");
+    // Init VBO
+    float amb[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
+    
+    initVBO(worldSettings.root);
 
     printInfo();
 

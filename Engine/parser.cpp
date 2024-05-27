@@ -148,32 +148,52 @@ void parseGroup (XMLElement* groupElem, Group& group) {
             if (colorElem) {
                 XMLElement* colorsubElem = colorElem->FirstChildElement("diffuse");
                 if (colorsubElem) {
-                    colorsubElem->QueryIntAttribute("R", &model.color.diffuse.R);
-                    colorsubElem->QueryIntAttribute("G", &model.color.diffuse.G);
-                    colorsubElem->QueryIntAttribute("B", &model.color.diffuse.B);
+                    if (colorsubElem->QueryIntAttribute("R", &model.color.diffuse.R) == XML_NO_ATTRIBUTE) model.color.diffuse.R = 200;
+                    if (colorsubElem->QueryIntAttribute("G", &model.color.diffuse.G) == XML_NO_ATTRIBUTE) model.color.diffuse.G = 200;
+                    if (colorsubElem->QueryIntAttribute("B", &model.color.diffuse.B) == XML_NO_ATTRIBUTE) model.color.diffuse.B = 200;
                 }
                 colorsubElem = colorElem->FirstChildElement("ambient");
                 if (colorsubElem) {
-                    colorsubElem->QueryIntAttribute("R", &model.color.ambient.R);
-                    colorsubElem->QueryIntAttribute("G", &model.color.ambient.G);
-                    colorsubElem->QueryIntAttribute("B", &model.color.ambient.B);
+                    if (colorsubElem->QueryIntAttribute("R", &model.color.ambient.R) == XML_NO_ATTRIBUTE) model.color.ambient.R = 50;
+                    if (colorsubElem->QueryIntAttribute("G", &model.color.ambient.G) == XML_NO_ATTRIBUTE) model.color.ambient.G = 50;
+                    if (colorsubElem->QueryIntAttribute("B", &model.color.ambient.B) == XML_NO_ATTRIBUTE) model.color.ambient.B = 50;
                 }
                 colorsubElem = colorElem->FirstChildElement("specular");
                 if (colorsubElem) {
-                    colorsubElem->QueryIntAttribute("R", &model.color.specular.R);
-                    colorsubElem->QueryIntAttribute("G", &model.color.specular.G);
-                    colorsubElem->QueryIntAttribute("B", &model.color.specular.B);
+                    if (colorsubElem->QueryIntAttribute("R", &model.color.specular.R) == XML_NO_ATTRIBUTE) model.color.specular.R = 0;
+                    if (colorsubElem->QueryIntAttribute("G", &model.color.specular.G) == XML_NO_ATTRIBUTE) model.color.specular.G = 0;
+                    if (colorsubElem->QueryIntAttribute("B", &model.color.specular.B) == XML_NO_ATTRIBUTE) model.color.specular.B = 0;
                 }
                 colorsubElem = colorElem->FirstChildElement("emissive");
                 if (colorsubElem) {
-                    colorsubElem->QueryIntAttribute("R", &model.color.emissive.R);
-                    colorsubElem->QueryIntAttribute("G", &model.color.emissive.G);
-                    colorsubElem->QueryIntAttribute("B", &model.color.emissive.B);
+                    if (colorsubElem->QueryIntAttribute("R", &model.color.emissive.R) == XML_NO_ATTRIBUTE) model.color.emissive.R = 0;
+                    if (colorsubElem->QueryIntAttribute("G", &model.color.emissive.G) == XML_NO_ATTRIBUTE) model.color.emissive.G = 0;
+                    if (colorsubElem->QueryIntAttribute("B", &model.color.emissive.B) == XML_NO_ATTRIBUTE) model.color.emissive.B = 0;
                 }
                 colorsubElem = colorElem->FirstChildElement("shininess");
                 if (colorsubElem) {
-                    colorsubElem->QueryIntAttribute("value", &model.color.shininess);
+                    if (colorsubElem->QueryIntAttribute("value", &model.color.shininess) == XML_NO_ATTRIBUTE) model.color.shininess = 0;
                 }
+            }
+            else
+            {
+                model.color.diffuse.R = 200;
+                model.color.diffuse.G = 200;
+                model.color.diffuse.B = 200;
+
+                model.color.ambient.R = 50;
+                model.color.ambient.G = 50;
+                model.color.ambient.B = 50;
+
+                model.color.specular.R = 0;
+                model.color.specular.G = 0;
+                model.color.specular.B = 0;
+
+                model.color.emissive.R = 0;
+                model.color.emissive.G = 0;
+                model.color.emissive.B = 0;
+
+                model.color.shininess = 0;
             }
 
             // Data

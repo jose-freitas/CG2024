@@ -22,17 +22,15 @@ ModelData cone(float radius, float height, int slices, int stacks) {
     std::vector<float> normals;
     std::vector<float> texCoord;
 
+    float deltaPhi = M_PI / stacks;
+    float delta = 2.0f * M_PI / slices;
 
-    float deltaPhi = (float)(M_PI) / stacks;
-    float delta = (2.0f * M_PI) / slices;
-    
-
-    //Bottom
-    for(int i = 0; i < slices; i++)
-    {
+    // Bottom
+    for (int i = 0; i < slices; i++) {
         float alfa = delta * i;
 
-		vertices.push_back(0.0f);
+        // Center of the base
+        vertices.push_back(0.0f);
         vertices.push_back(0.0f);
         vertices.push_back(0.0f);
 
@@ -40,11 +38,11 @@ ModelData cone(float radius, float height, int slices, int stacks) {
         normals.push_back(-1.0f);
         normals.push_back(0.0f);
 
-        texCoord.push_back((float) (i+1) /slices);
-        texCoord.push_back(0.0f);
+        texCoord.push_back(0.5f);
+        texCoord.push_back(0.5f);
 
-
-		vertices.push_back(radius * sin(alfa + delta));
+        // First point on the circle
+        vertices.push_back(radius * sin(alfa + delta));
         vertices.push_back(0.0f);
         vertices.push_back(radius * cos(alfa + delta));
 
@@ -52,10 +50,10 @@ ModelData cone(float radius, float height, int slices, int stacks) {
         normals.push_back(-1.0f);
         normals.push_back(0.0f);
 
-        texCoord.push_back((float)i /slices);
-        texCoord.push_back(0.0f);
+        texCoord.push_back(0.5f + 0.5f * sin(alfa + delta));
+        texCoord.push_back(0.5f + 0.5f * cos(alfa + delta));
 
-        
+        // Second point on the circle
         vertices.push_back(radius * sin(alfa));
         vertices.push_back(0.0f);
         vertices.push_back(radius * cos(alfa));
@@ -64,102 +62,94 @@ ModelData cone(float radius, float height, int slices, int stacks) {
         normals.push_back(-1.0f);
         normals.push_back(0.0f);
 
-        texCoord.push_back(0.5f);
-        texCoord.push_back(0.5f);
+        texCoord.push_back(0.5f + 0.5f * sin(alfa));
+        texCoord.push_back(0.5f + 0.5f * cos(alfa));
     }
 
-
-    //Body
-    for(int i = 0; i<stacks; i++)
-    {
-        float phi = i * deltaPhi;
-        float nextPhi = (i + 1) * deltaPhi;
-
+    // Body
+    for (int i = 0; i < stacks; i++) {
         float y = i * height / stacks;
         float next_y = (i + 1) * height / stacks;
         float r = radius * (1 - static_cast<float>(i) / stacks);
         float next_r = radius * (1 - static_cast<float>(i + 1) / stacks);
-        
-        for(int j = 0; j<slices; j++)
-        {
+
+        for (int j = 0; j < slices; j++) {
             float alfa = delta * j;
             float nextAlfa = (j + 1) * delta;
 
+            // First triangle
             vertices.push_back(r * sin(alfa));
             vertices.push_back(y);
             vertices.push_back(r * cos(alfa));
 
-            normals.push_back(sin(j * ((2 * M_PI) / slices)));
-			normals.push_back(height/stacks);
-			normals.push_back(cos(j * ((2 * M_PI) / slices)));
+            normals.push_back(sin(alfa));
+            normals.push_back(radius / height);
+            normals.push_back(cos(alfa));
 
-            texCoord.push_back((float)j/slices);
-            texCoord.push_back((float)i/stacks);
+            texCoord.push_back(static_cast<float>(j) / slices);
+            texCoord.push_back(static_cast<float>(i) / stacks);
 
-
-            vertices.push_back(r * sin(alfa + delta));
+            vertices.push_back(r * sin(nextAlfa));
             vertices.push_back(y);
-            vertices.push_back(r * cos(alfa + delta));
+            vertices.push_back(r * cos(nextAlfa));
 
-            normals.push_back(sin((j + 1) * ((2 * M_PI) / slices)));
-			normals.push_back(height/stacks);
-			normals.push_back(cos((j + 1) * ((2 * M_PI) / slices)));
+            normals.push_back(sin(nextAlfa));
+            normals.push_back(radius / height);
+            normals.push_back(cos(nextAlfa));
 
-            texCoord.push_back((float)(j+1) / slices);
-            texCoord.push_back((float)i / stacks);
-
-
-            vertices.push_back((next_r * sin(alfa)));
-            vertices.push_back(next_y);
-            vertices.push_back(next_r * cos(alfa));
-
-            normals.push_back(sin(j * ((2 * M_PI) / slices)));
-			normals.push_back(height/stacks);
-			normals.push_back(cos(j * ((2 * M_PI) / slices)));
-
-            texCoord.push_back((float)j / slices);
-            texCoord.push_back((float)(i+1) / stacks);
-
+            texCoord.push_back(static_cast<float>(j + 1) / slices);
+            texCoord.push_back(static_cast<float>(i) / stacks);
 
             vertices.push_back(next_r * sin(alfa));
             vertices.push_back(next_y);
             vertices.push_back(next_r * cos(alfa));
 
-            normals.push_back(sin(j * ((2 * M_PI) / slices)));
-			normals.push_back(height / stacks);
-			normals.push_back(cos(j * ((2 * M_PI) / slices)));
+            normals.push_back(sin(alfa));
+            normals.push_back(radius / height);
+            normals.push_back(cos(alfa));
 
-            texCoord.push_back((float)j / slices);
-            texCoord.push_back((float)(i+1) / stacks);
+            texCoord.push_back(static_cast<float>(j) / slices);
+            texCoord.push_back(static_cast<float>(i + 1) / stacks);
 
-
-            vertices.push_back(r * sin(alfa + delta));
-            vertices.push_back(y);
-            vertices.push_back(r * cos(alfa + delta));
-
-            normals.push_back(sin((j + 1) * ((2 * M_PI) / slices)));
-			normals.push_back(height / stacks);
-			normals.push_back(cos((j + 1) * ((2 * M_PI) / slices)));
-
-            texCoord.push_back((float)(j+1) / slices);
-            texCoord.push_back((float)i / stacks);
-
-
-            vertices.push_back(next_r * sin(alfa + delta));
+            // Second triangle
+            vertices.push_back(next_r * sin(alfa));
             vertices.push_back(next_y);
-            vertices.push_back(next_r * cos(alfa + delta));
+            vertices.push_back(next_r * cos(alfa));
 
-            normals.push_back(sin((j + 1) * ((2 * M_PI) / slices)));
-			normals.push_back(height / stacks);
-			normals.push_back(cos((j + 1) * ((2 * M_PI) / slices)));
+            normals.push_back(sin(alfa));
+            normals.push_back(radius / height);
+            normals.push_back(cos(alfa));
 
-            texCoord.push_back((float)(j+1) / slices);
-            texCoord.push_back((float)(i+1) / stacks);
+            texCoord.push_back(static_cast<float>(j) / slices);
+            texCoord.push_back(static_cast<float>(i + 1) / stacks);
+
+            vertices.push_back(r * sin(nextAlfa));
+            vertices.push_back(y);
+            vertices.push_back(r * cos(nextAlfa));
+
+            normals.push_back(sin(nextAlfa));
+            normals.push_back(radius / height);
+            normals.push_back(cos(nextAlfa));
+
+            texCoord.push_back(static_cast<float>(j + 1) / slices);
+            texCoord.push_back(static_cast<float>(i) / stacks);
+
+            vertices.push_back(next_r * sin(nextAlfa));
+            vertices.push_back(next_y);
+            vertices.push_back(next_r * cos(nextAlfa));
+
+            normals.push_back(sin(nextAlfa));
+            normals.push_back(radius / height);
+            normals.push_back(cos(nextAlfa));
+
+            texCoord.push_back(static_cast<float>(j + 1) / slices);
+            texCoord.push_back(static_cast<float>(i + 1) / stacks);
         }
     }
-    modelData.vertices = vertices;
-	modelData.normals = normals;
-	modelData.texCoord = texCoord;
 
-	return modelData;
+    modelData.vertices = vertices;
+    modelData.normals = normals;
+    modelData.texCoord = texCoord;
+
+    return modelData;
 }
