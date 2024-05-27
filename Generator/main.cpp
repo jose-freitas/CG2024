@@ -1,3 +1,7 @@
+#include <vector>
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
 
 #include "./include/generator.hpp"
 
@@ -8,10 +12,6 @@
 #include "bezier.cpp"
 #include "torus.cpp"
 
-#include <vector>
-#include <stdio.h>
-#include <iostream>
-#include <fstream>
 
 
 const std::string MODEL_PATH = "../../modelFiles/";

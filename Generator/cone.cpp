@@ -14,21 +14,13 @@
 #include <string>
 #include <bitset>
 
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <stdio.h>
-#include <vector>
-
-
 
 ModelData cone(float radius, float height, int slices, int stacks) {
-
     ModelData modelData;
 
-    //Vector creation
     std::vector<float> vertices;
-	std::vector<float> normals;
-	std::vector<float> texCoord;
+    std::vector<float> normals;
+    std::vector<float> texCoord;
 
 
     float deltaPhi = (float)(M_PI) / stacks;
@@ -97,9 +89,9 @@ ModelData cone(float radius, float height, int slices, int stacks) {
             vertices.push_back(y);
             vertices.push_back(r * cos(alfa));
 
-            normals.push_back(sin(phi) * cos(alfa));
-			normals.push_back(cos(phi));
-			normals.push_back(sin(phi) * sin(alfa));
+            normals.push_back(sin(j * ((2 * M_PI) / slices)));
+			normals.push_back(height/stacks);
+			normals.push_back(cos(j * ((2 * M_PI) / slices)));
 
             texCoord.push_back((float)j/slices);
             texCoord.push_back((float)i/stacks);
@@ -109,9 +101,9 @@ ModelData cone(float radius, float height, int slices, int stacks) {
             vertices.push_back(y);
             vertices.push_back(r * cos(alfa + delta));
 
-            normals.push_back(sin(phi) * cos(nextAlfa));
-			normals.push_back(cos(phi));
-			normals.push_back(sin(phi) * sin(nextAlfa));
+            normals.push_back(sin((j + 1) * ((2 * M_PI) / slices)));
+			normals.push_back(height/stacks);
+			normals.push_back(cos((j + 1) * ((2 * M_PI) / slices)));
 
             texCoord.push_back((float)(j+1) / slices);
             texCoord.push_back((float)i / stacks);
@@ -121,9 +113,9 @@ ModelData cone(float radius, float height, int slices, int stacks) {
             vertices.push_back(next_y);
             vertices.push_back(next_r * cos(alfa));
 
-            normals.push_back(sin(nextPhi) * cos(alfa));
-			normals.push_back(cos(nextPhi));
-			normals.push_back(sin(nextPhi) * sin(alfa));
+            normals.push_back(sin(j * ((2 * M_PI) / slices)));
+			normals.push_back(height/stacks);
+			normals.push_back(cos(j * ((2 * M_PI) / slices)));
 
             texCoord.push_back((float)j / slices);
             texCoord.push_back((float)(i+1) / stacks);
@@ -133,9 +125,9 @@ ModelData cone(float radius, float height, int slices, int stacks) {
             vertices.push_back(next_y);
             vertices.push_back(next_r * cos(alfa));
 
-            normals.push_back(sin(nextPhi) * cos(alfa));
-			normals.push_back(cos(nextPhi));
-			normals.push_back(sin(nextPhi) * sin(alfa));
+            normals.push_back(sin(j * ((2 * M_PI) / slices)));
+			normals.push_back(height / stacks);
+			normals.push_back(cos(j * ((2 * M_PI) / slices)));
 
             texCoord.push_back((float)j / slices);
             texCoord.push_back((float)(i+1) / stacks);
@@ -145,9 +137,9 @@ ModelData cone(float radius, float height, int slices, int stacks) {
             vertices.push_back(y);
             vertices.push_back(r * cos(alfa + delta));
 
-            normals.push_back(sin(phi) * cos(nextAlfa));
-			normals.push_back(cos(phi));
-			normals.push_back(sin(phi) * sin(nextAlfa));
+            normals.push_back(sin((j + 1) * ((2 * M_PI) / slices)));
+			normals.push_back(height / stacks);
+			normals.push_back(cos((j + 1) * ((2 * M_PI) / slices)));
 
             texCoord.push_back((float)(j+1) / slices);
             texCoord.push_back((float)i / stacks);
@@ -157,9 +149,9 @@ ModelData cone(float radius, float height, int slices, int stacks) {
             vertices.push_back(next_y);
             vertices.push_back(next_r * cos(alfa + delta));
 
-            normals.push_back(sin(nextPhi) * cos(nextAlfa));
-			normals.push_back(cos(nextPhi));
-			normals.push_back(sin(nextPhi) * sin(nextAlfa));
+            normals.push_back(sin((j + 1) * ((2 * M_PI) / slices)));
+			normals.push_back(height / stacks);
+			normals.push_back(cos((j + 1) * ((2 * M_PI) / slices)));
 
             texCoord.push_back((float)(j+1) / slices);
             texCoord.push_back((float)(i+1) / stacks);
@@ -170,6 +162,3 @@ ModelData cone(float radius, float height, int slices, int stacks) {
 	modelData.texCoord = texCoord;
 
 	return modelData;
-}
-
-

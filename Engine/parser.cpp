@@ -56,7 +56,8 @@ void parseGroup (XMLElement* groupElem, Group& group) {
             if (translateElem->QueryFloatAttribute("time", &group.transform.translate.time) == XML_NO_ATTRIBUTE) group.transform.translate.time = 0.0f;
             translateElem->QueryBoolAttribute("align", &group.transform.translate.align);
 
-        // Parse Catmull-Rom curve points
+
+            // Parse Catmull-Rom curve points
             for (XMLElement* pointElem = translateElem->FirstChildElement("point"); pointElem; pointElem = pointElem->NextSiblingElement("point")) {
                 float x, y, z;
                 pointElem->QueryFloatAttribute("x", &x);
@@ -65,7 +66,14 @@ void parseGroup (XMLElement* groupElem, Group& group) {
                 group.transform.translate.points.push_back(Coords{x, y, z});
             }
 
-            group.transform.currentTranslate = group.transform.translate.points[0];
+            if (group.transform.translate.points.size() > 0) {
+                group.transform.currentTranslate = group.transform.translate.points[0];
+            }
+            else {
+                translateElem->QueryFloatAttribute("x", &group.transform.currentTranslate.x);
+                translateElem->QueryFloatAttribute("y", &group.transform.currentTranslate.y);
+                translateElem->QueryFloatAttribute("z", &group.transform.currentTranslate.z);
+            }
         }
         else {
             group.transform.translate.time = 0.0f;
@@ -247,14 +255,14 @@ void parser (const char* file, World& world) {
                 Light light;
                 light.type = lightElem->Attribute("type");
                 if (light.type == "point" || light.type == "spotlight") {
-                    lightElem->QueryFloatAttribute("posX", &light.position.x);
-                    lightElem->QueryFloatAttribute("posY", &light.position.y);
-                    lightElem->QueryFloatAttribute("posZ", &light.position.z);
+                    lightElem->QueryFloatAttribute("posx", &light.position.x);
+                    lightElem->QueryFloatAttribute("posy", &light.position.y);
+                    lightElem->QueryFloatAttribute("posz", &light.position.z);
                 }
                 if (light.type == "directional" || light.type == "spotlight") {
-                    lightElem->QueryFloatAttribute("dirX", &light.direction.x);
-                    lightElem->QueryFloatAttribute("dirY", &light.direction.y);
-                    lightElem->QueryFloatAttribute("dirZ", &light.direction.z);
+                    lightElem->QueryFloatAttribute("dirx", &light.direction.x);
+                    lightElem->QueryFloatAttribute("diry", &light.direction.y);
+                    lightElem->QueryFloatAttribute("dirz", &light.direction.z);
                 }
                 if (light.type == "spotlight") {
                     lightElem->QueryFloatAttribute("cutoff", &light.cutoff);

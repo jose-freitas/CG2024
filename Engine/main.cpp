@@ -21,7 +21,7 @@
 #include "catmullrom.cpp"
 
 
-float alfa = 0.0f, bet = 0.0f, radius = 20.0f;
+float alfa = 0.0f, bet = 0.0f, radius = 5.0f;
 float TESSELLATION = 100.0f;
 
 World worldSettings;
@@ -286,45 +286,58 @@ void renderGroup(Group& group, vector<Group *> parentGroups) {
 
 void renderLights(std::vector<Light> lights)
 {
-    for(int i = 0; i < GL_MAX_LIGHTS; i++) 
-    {
-        if ((i + 1) > lights.size())
-            return;
-
+    for(int i = 0; i < lights.size(); i++) 
+    {    
         Light light = lights[i];
 
         if(light.type == "point")
         {
-            glLightfv(i , GL_POSITION, light.position.ToFloats());
+            float* pos = light.position.ToFloats();
+            pos[4] = 1.0f;
+            glLightfv(GL_LIGHT0 + i , GL_POSITION, pos);
+  
         }
         else if(light.type == "directional")
         {
-            glLightfv(i , GL_POSITION, light.direction.ToFloats());
+            glLightfv(GL_LIGHT0 + i , GL_POSITION, light.direction.ToFloats());
         }
         else if(light.type == "spotlight")
         {
+            float* pos = light.position.ToFloats();
+            pos[4] = 1.0f;
             float cuty[1] = { light.cutoff };
 
-            glLightfv(i , GL_POSITION, light.position.ToFloats());
-            glLightfv(i , GL_SPOT_DIRECTION, light.direction.ToFloats());
-            glLightfv(i , GL_SPOT_CUTOFF, cuty);
+            glLightfv(GL_LIGHT0 + i , GL_POSITION, pos);
+            glLightfv(GL_LIGHT0 + i , GL_SPOT_DIRECTION, light.direction.ToFloats());
+            glLightfv(GL_LIGHT0 + i , GL_SPOT_CUTOFF, cuty);
         }
     }
 }
 
 
 void renderAxis () {
+    float black[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    float red[4] = { 1.0f, 0.0f, 0.0f, 1.0f };
+    float green[4] = { 0.0f, 1.0f, 0.0f, 1.0f };
+    float blue[4] = { 0.0f, 0.0f, 1.0f, 1.0f };
+
     glBegin(GL_LINES);
         // X axis in red
-        glColor3f(1.0f, 0.0f, 0.0f);
+        glMaterialfv(GL_FRONT, GL_AMBIENT, red);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, black);
+        glMaterialfv(GL_FRONT, GL_EMISSION, red);
         glVertex3f(-100.0f, 0.0f, 0.0f);
         glVertex3f( 100.0f, 0.0f, 0.0f);
         // Y Axis in Green
-        glColor3f(0.0f, 1.0f, 0.0f);
+        glMaterialfv(GL_FRONT, GL_AMBIENT, green);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, black);
+        glMaterialfv(GL_FRONT, GL_EMISSION, green);
         glVertex3f(0.0f, -100.0f, 0.0f);
         glVertex3f(0.0f, 100.0f, 0.0f);
         // Z Axis in Blue
-        glColor3f(0.0f, 0.0f, 1.0f);
+        glMaterialfv(GL_FRONT, GL_AMBIENT, blue);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, black);
+        glMaterialfv(GL_FRONT, GL_EMISSION, blue);
         glVertex3f(0.0f, 0.0f, -100.0f);
         glVertex3f(0.0f, 0.0f, 100.0f);
     glEnd();
@@ -335,15 +348,17 @@ void renderScene() {
     // Clear buffers
     glClearColor(0.0f,0.0f,0.0f,0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glLoadIdentity();
 
     // Set the Camera
     setCamera(worldSettings.camera);
 
+    // Set the Lights
+    renderLights(worldSettings.lights);
+
     // Rendering
     renderAxis();
 
-    // Set the Lights
-    renderLights(worldSettings.lights);
 
     Coords emptyCoords = Coords { 0.0f, 0.0f, 0.0f };
 
@@ -478,22 +493,22 @@ int main(int argc, char **argv) {
 
     // init Lighting
     glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
 
-    float dark[4] = {0.2, 0.2, 0.2, 1.0};
-	float white[4] = {1.0, 1.0, 1.0, 1.0};
-	float black[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+    for(int i = 0; i < worldSettings.lights.size(); i++) 
+    {
+        glEnable(GL_LIGHT0 + i);
 
-    // light colors
-	glLightfv(GL_LIGHT0, GL_AMBIENT, dark);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, white);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, white);
+        float dark[4] = {0.2, 0.2, 0.2, 1.0};
+        float white[4] = {1.0, 1.0, 1.0, 1.0};
+        float black[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 
-    // controls global ambient light
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, black);
+        glLightfv(GL_LIGHT0+ i, GL_AMBIENT, dark);
+        glLightfv(GL_LIGHT0+ i, GL_DIFFUSE, white);
+        glLightfv(GL_LIGHT0+ i, GL_SPECULAR, white);
+    }
 
-    float amb[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
+    //float amb[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	//glLightModelfv(GL_LIGHT_MODEL_AMBIENT, amb);
 
     //init
     glEnableClientState(GL_VERTEX_ARRAY);

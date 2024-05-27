@@ -48,6 +48,10 @@ struct Coords {
             floats[3] = 0.0f;
             return floats;
     }
+
+    void Print(){
+        std::cout << "(" << x << "," << y << "," << z << ")\n";
+    }
 };
 
 struct Translate {

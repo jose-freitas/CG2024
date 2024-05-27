@@ -1,7 +1,8 @@
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <stdio.h>
 #include <vector>
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+
 
 ModelData box (float dimension, int divisions) {
 
@@ -28,6 +29,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half);
@@ -37,6 +41,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half);
@@ -45,6 +52,10 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
+
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 			
 			// Right Triangle
 			vertices.push_back((x + 1) * unit - half);
@@ -55,6 +66,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half);
@@ -64,6 +78,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back((x+1) * unit - half);
 			vertices.push_back(half);
@@ -72,6 +89,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
+
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
 		}
 	}
 
@@ -87,6 +107,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(-1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(-half);
@@ -96,6 +119,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(-1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(-half);
@@ -104,6 +130,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(-1.0f);
 			normals.push_back(0.0f);
+
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
 			
 			// Right Triangle
             vertices.push_back((x+1) * unit - half);
@@ -114,6 +143,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(-1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(-half);
@@ -123,6 +155,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(-1.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(-half);
@@ -131,6 +166,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(-1.0f);
 			normals.push_back(0.0f);
+
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
 		}
 	}
 
@@ -146,6 +184,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(-1.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half - (z+1) * unit);
@@ -155,6 +196,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(-1.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half - z * unit);
@@ -163,6 +207,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 			normals.push_back(-1.0f);
+
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
 
 			
 			// Right Triangle
@@ -174,6 +221,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(-1.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half - (z+1) * unit);
@@ -183,6 +233,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(-1.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half - (z+1) * unit);
@@ -191,6 +244,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 			normals.push_back(-1.0f);
+
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
 		}
 	}
 
@@ -206,6 +262,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(1.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back(x * unit - half);
 			vertices.push_back(half - (z+1) * unit);
@@ -214,6 +273,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 			normals.push_back(1.0f);
+
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
 		
 
 			vertices.push_back((x + 1) * unit - half);
@@ -223,6 +285,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 			normals.push_back(1.0f);
+
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
 
 			
 			// Right Triangle
@@ -234,6 +299,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(1.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half - (z+1) * unit);
@@ -243,6 +311,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(1.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back((x + 1) * unit - half);
 			vertices.push_back(half - z * unit);
@@ -251,6 +322,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 			normals.push_back(1.0f);
+
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
 		}
 	}
 
@@ -266,6 +340,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back(- half);
 			vertices.push_back(half - x * unit);
@@ -275,6 +352,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back(- half);
 			vertices.push_back(half - x * unit);
@@ -283,6 +363,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(-1.0f);
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
+
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
 
 			
 			// Right Triangle
@@ -294,6 +377,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back(- half);
 			vertices.push_back(half - (x + 1) * unit);
@@ -303,6 +389,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back(- half);
 			vertices.push_back(half - x * unit);
@@ -311,6 +400,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(-1.0f);
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
+
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
 		}
 	}
 
@@ -326,6 +418,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
+
 
 			vertices.push_back(half);
 			vertices.push_back(half - x * unit);
@@ -335,6 +430,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back(half);
 			vertices.push_back(half - (x + 1) * unit);
@@ -343,6 +441,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
+
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
 
 			
 			// Right Triangle
@@ -354,6 +455,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back((x * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back(half);
 			vertices.push_back(half - (x + 1) * unit);
@@ -363,6 +467,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
 
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back(((z+1) * unit) / dimension);
+
 
 			vertices.push_back(half);
 			vertices.push_back(half - (x + 1) * unit);
@@ -371,6 +478,9 @@ ModelData box (float dimension, int divisions) {
 			normals.push_back(1.0f);
 			normals.push_back(0.0f);
 			normals.push_back(0.0f);
+
+			texCoord.push_back(((x+1) * unit) / dimension);
+			texCoord.push_back((z * unit) / dimension);
 		}
 	}
 	modelData.vertices = vertices;
