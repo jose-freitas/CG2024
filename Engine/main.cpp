@@ -194,7 +194,8 @@ void TransformGroup(Group& group)
     
     if (group.transform.rotate.time > 0.0f)
         angle = elapsedTime * 360.0f / group.transform.rotate.time;
-    
+
+    // As transformacoes estao locked
     // Transform
     glTranslatef(newTranslate.x, newTranslate.y, newTranslate.z);
     glRotatef(angle, group.transform.rotate.point.x, group.transform.rotate.point.y, group.transform.rotate.point.z);
@@ -464,6 +465,11 @@ int main(int argc, char **argv) {
 
 	// Required callback registry 
 	timebase = glutGet (GLUT_ELAPSED_TIME);
+
+
+    // IF I WANT LINES (def color prof grey)
+    //glPolygonMode (GL_FRONT_AND_BACK, GL_LINE); 
+
 
     glutDisplayFunc(renderScene);
     glutIdleFunc(renderScene);

@@ -156,6 +156,18 @@ ModelData bezier(const std::string& input_file, int tesselation) {
                 texCoord.push_back(u);
                 texCoord.push_back(v);
 
+                getBezierPoint(u + delta_u, v, points, pos, du, dv);
+                cross(du, dv, normal);
+                normalize(normal);
+                vertices.push_back(pos[0]);
+                vertices.push_back(pos[1]);
+                vertices.push_back(pos[2]);
+                normals.push_back(normal[0]);
+                normals.push_back(normal[1]);
+                normals.push_back(normal[2]);
+                texCoord.push_back(u + delta_u);
+                texCoord.push_back(v);
+
                 getBezierPoint(u, v + delta_v, points, pos, du, dv);
                 cross(du, dv, normal);
                 normalize(normal);
@@ -168,17 +180,6 @@ ModelData bezier(const std::string& input_file, int tesselation) {
                 texCoord.push_back(u);
                 texCoord.push_back(v + delta_v);
 
-                getBezierPoint(u + delta_u, v, points, pos, du, dv);
-                cross(du, dv, normal);
-                normalize(normal);
-                vertices.push_back(pos[0]);
-                vertices.push_back(pos[1]);
-                vertices.push_back(pos[2]);
-                normals.push_back(normal[0]);
-                normals.push_back(normal[1]);
-                normals.push_back(normal[2]);
-                texCoord.push_back(u + delta_u);
-                texCoord.push_back(v);
 
                 // Triangle 2
                 getBezierPoint(u + delta_u, v + delta_v, points, pos, du, dv);
@@ -193,18 +194,6 @@ ModelData bezier(const std::string& input_file, int tesselation) {
                 texCoord.push_back(u + delta_u);
                 texCoord.push_back(v + delta_v);
 
-                getBezierPoint(u + delta_u, v, points, pos, du, dv);
-                cross(du, dv, normal);
-                normalize(normal);
-                vertices.push_back(pos[0]);
-                vertices.push_back(pos[1]);
-                vertices.push_back(pos[2]);
-                normals.push_back(normal[0]);
-                normals.push_back(normal[1]);
-                normals.push_back(normal[2]);
-                texCoord.push_back(u + delta_u);
-                texCoord.push_back(v);
-
                 getBezierPoint(u, v + delta_v, points, pos, du, dv);
                 cross(du, dv, normal);
                 normalize(normal);
@@ -216,6 +205,18 @@ ModelData bezier(const std::string& input_file, int tesselation) {
                 normals.push_back(normal[2]);
                 texCoord.push_back(u);
                 texCoord.push_back(v + delta_v);
+
+                getBezierPoint(u + delta_u, v, points, pos, du, dv);
+                cross(du, dv, normal);
+                normalize(normal);
+                vertices.push_back(pos[0]);
+                vertices.push_back(pos[1]);
+                vertices.push_back(pos[2]);
+                normals.push_back(normal[0]);
+                normals.push_back(normal[1]);
+                normals.push_back(normal[2]);
+                texCoord.push_back(u + delta_u);
+                texCoord.push_back(v);
             }
         }
     }
