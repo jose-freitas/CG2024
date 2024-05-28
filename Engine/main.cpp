@@ -189,15 +189,33 @@ void TransformGroup(Group& group)
         newTranslate = animateCatmullRomCurve(group.transform.translate.time, p, point_count);
     }
 
+// Calculate rotation to align with the direction of the curve
+    float up[3] = {0.0f, 1.0f, 0.0f};  // Assume up vector is along the y-axis
+    float forward[3] = {deriv[0], deriv[1], deriv[2]};
+    float right[3];
+    normalize(forward);
+    cross(up, forward, right);  // Calculate right vector
+    normalize(right);
+    cross(forward, right, up);  // Recalculate up vector
+    normalize(up);
+
+    // Create rotation matrix
+    float rotationMatrix[16] = {
+        right[0], right[1], right[2], 0.0f,
+        up[0], up[1], up[2], 0.0f,
+        -forward[0], -forward[1], -forward[2], 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
+
     // Animate Rotation
     float angle = group.transform.rotate.angle;
-    
     if (group.transform.rotate.time > 0.0f)
         angle = elapsedTime * 360.0f / group.transform.rotate.time;
 
     // As transformacoes estao locked
-    // Transform
+    // Apply transformations
     glTranslatef(newTranslate.x, newTranslate.y, newTranslate.z);
+    glMultMatrixf(rotationMatrix);
     glRotatef(angle, group.transform.rotate.point.x, group.transform.rotate.point.y, group.transform.rotate.point.z);
     glScalef(group.transform.scale.x, group.transform.scale.y, group.transform.scale.z);
 }
